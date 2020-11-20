@@ -6,7 +6,17 @@ import App from "./App";
 import axios from 'axios';
 
 export default class Index extends Comment{
+    
+    constructor(props){
 
+        super(props);
+    }
+
+    render(){
+        return (
+            <h3>Kek</h3>
+        );
+    }
 }
 
 window.axios=axios;

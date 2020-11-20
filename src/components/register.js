@@ -51,6 +51,8 @@ export default class Register extends Component {
 
     render() {
         return (
+            <div className="outer">
+            <div className="inner">
             <form onSubmit={ this.submit }>
                 <h3>Register</h3>
                 <div className="form-group">
@@ -73,6 +75,8 @@ export default class Register extends Component {
                     Already registered <a href="#">log in?</a>
                 </p>
             </form>
+            </div>
+            </div>
         );
     }
 }

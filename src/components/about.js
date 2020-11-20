@@ -1,9 +1,11 @@
-import React, {Conponent} from 'react';
+import React, {Component} from 'react';
 
 export default class About extends Comment{
     render() {
         return (
-            <div/>
+            <div>
+              <h3>about</h3>  
+            </div>
         )
     }
 }

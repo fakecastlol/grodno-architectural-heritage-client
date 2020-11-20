@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import './identity.css';
 
 export default class Login extends Component {
@@ -35,25 +36,29 @@ export default class Login extends Component {
         }
     }
 
-    submit(event){
-        this.setState({loggedIn:true})
+    submit = (event) => {
+        // this.setState({loggedIn:true})
         event.preventDefault();
         
-        // console.log(this.state);
+        console.log(this.state);
 
-        window.axios.post('http://localhost:5000/login',{email: this.state.email, password: this.state.password})
+        window.axios.post('https://localhost:5001/login',{email: this.state.email, password: this.state.password})
         .then(response=>{
            console.log(response);
     
            this.setState({loggedIn:true});
     
-           localStorage.setItem('token',response.data.auth.access_token)
+           localStorage.setItem('token',response.data.token)
+
+        //    Redirect.call(Index);
         });
     }
     
 
     render() {
         return (
+            <div className="outer">
+            <div className="inner">
             <form onSubmit={this.submit}>
                 <h3>Login</h3>
 
@@ -79,6 +84,8 @@ export default class Login extends Component {
                     Forgot <a href="#">password?</a>
                 </p>
             </form>
+            </div>
+            </div>
         );
     }
 }
