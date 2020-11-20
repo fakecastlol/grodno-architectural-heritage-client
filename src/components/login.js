@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import './identity.css';
 
-export default class Login extends Component {
+export class Login extends Component {
 
     constructor(props){
 

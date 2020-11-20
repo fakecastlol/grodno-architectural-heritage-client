@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-export default class Home extends Component {
+export class Home extends Component {
     static displayName = Home.name;
 
     constructor(props){
@@ -10,7 +10,7 @@ export default class Home extends Component {
 
     render () {
         return (
-            <div>
+            <div style={{marginTop: "10em"}}>
                 <h3>welcome to the club buddy</h3>
             </div>
         )

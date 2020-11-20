@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import './identity.css';
 
-export default class Register extends Component {
+export class Register extends Component {
 
     constructor(props) {
 

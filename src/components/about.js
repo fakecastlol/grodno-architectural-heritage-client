@@ -1,6 +1,12 @@
 import React, {Component} from 'react';
 
-export default class About extends Comment{
+export class About extends Comment{
+
+    constructor(props){
+
+        super(props);
+    }
+
     render() {
         return (
             <div>
