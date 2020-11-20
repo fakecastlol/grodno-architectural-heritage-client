@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import './identity.css';
 
 export default class Register extends Component {
 
@@ -39,7 +40,7 @@ export default class Register extends Component {
 
         console.log(this.state);
 
-        window.axios.post('http://localhost:5000/register', { email: this.state.email, password: this.state.password, confirmPassword: this.confirmPassword })
+        window.axios.post('https://localhost:5001/register', { email: this.state.email, password: this.state.password, confirmPassword: this.confirmPassword })
             .then(response => {
 
                 localStorage.setItem('token', response.data.auth.access_token)
