@@ -3,7 +3,7 @@ import axios from "axios";
 const API_URL = "http://localhost:5001/";
 
 const register = (email, password) => {
-  return axios.post(API_URL + "signup", {
+  return axios.post(API_URL + "register", {
     email,
     password,
   });
@@ -11,7 +11,7 @@ const register = (email, password) => {
 
 const login = (email, password) => {
   return axios
-    .post(API_URL + "signin", {
+    .post(API_URL + "login", {
       email,
       password,
     })

@@ -1,23 +1,10 @@
-import React, {Component} from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import axios from 'axios';
-
-export class Index extends Component{
-    
-    constructor(props){
-
-        super(props);
-    }
-
-    render(){
-        return (
-            <h3>Kek</h3>
-        );
-    }
-}
+import * as serviceWorker from './serviceWorker'
 
 window.axios=axios;
 
@@ -27,3 +14,5 @@ ReactDOM.render(
     </BrowserRouter>,
     document.getElementById("root")
 );
+
+serviceWorker.unregister();

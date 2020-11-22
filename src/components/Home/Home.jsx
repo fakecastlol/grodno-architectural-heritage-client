@@ -1,18 +1,32 @@
-import React, {Component} from 'react';
+import React, { useState, useEffect } from 'react';
+import UserService from '../../services/user.service'
 
-export class Home extends Component {
-    static displayName = Home.name;
-
-    constructor(props){
-
-        super(props);
-    }
-
-    render () {
-        return (
-            <div style={{marginTop: "10em"}}>
-                <h3>welcome to the club buddy</h3>
-            </div>
-        )
-    }
-}
+const Home = () => {
+    const [content, setContent] = useState("");
+  
+    useEffect(() => {
+      UserService.getPublicContent().then(
+        (response) => {
+          setContent(response.data);
+        },
+        (error) => {
+          const _content =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+  
+          setContent(_content);
+        }
+      );
+    }, []);
+  
+    return (
+      <div className="container">
+        <header className="jumbotron">
+          <h3>{content}</h3>
+        </header>
+      </div>
+    );
+  };
+  
+  export default Home;
