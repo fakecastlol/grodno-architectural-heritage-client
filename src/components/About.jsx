@@ -19,7 +19,7 @@ export class About extends Component{
     render() {
         return (
             <div style={{marginTop: "10em"}}>
-              <h3>about</h3>  
+              <h2>about page</h2>  
             </div>
         )
     }
