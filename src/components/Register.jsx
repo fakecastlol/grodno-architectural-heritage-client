@@ -35,9 +35,23 @@ export class Register extends Component {
         });
     }
 
+    handleConfirmPassword = (event) => {
+        // if (typeof input["password"] !== "undefined" && typeof input["confirm_password"] !== "undefined") {
+            let password = event.target.value;
+            let confirmPassword = event.target.value;
+            let errors = {};      
+            let isValid = true;
+
+            if (password != confirmPassword) {
+              isValid = false;
+              errors["password"] = "Passwords don't match.";
+            }
+        // }
+    }
+
     submit = (event) => {
         event.preventDefault();
-
+        this.handleConfirmPassword();
         console.log(this.state);
 
         window.axios.post('https://localhost:5001/register', { email: this.state.email, password: this.state.password, confirmPassword: this.confirmPassword })
@@ -45,8 +59,8 @@ export class Register extends Component {
 
                 localStorage.setItem('token', response.data.auth.access_token)
                 
-            })
-            ;
+            }
+            );
     }
 
     render() {
@@ -67,7 +81,7 @@ export class Register extends Component {
 
                 <div className="form-group">
                     <label>Confirm password</label>
-                    <input type="password" className="form-control" placeholder="Enter password" onChange = { this.handleChangeConfirmPassword }/>
+                    <input type="confirm_password" className="form-control" placeholder="Enter password" onChange = { this.handleChangeConfirmPassword }/>
                 </div>
 
                 <button type="submit" className="btn btn-dark btn-lg btn-block" >Sign up</button>

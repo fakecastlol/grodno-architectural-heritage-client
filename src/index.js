@@ -5,7 +5,7 @@ import "./index.css";
 import App from "./App";
 import axios from 'axios';
 
-export class Index extends Comment{
+export class Index extends Component{
     
     constructor(props){
 

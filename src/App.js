@@ -2,10 +2,10 @@ import React from 'react';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Login } from "./components/login";
-import { Register } from "./components/register";
+import { Login } from "./components/Login";
+import { Register } from "./components/Register";
 import { Index } from "./index.js";
-import { About } from "./components/about";
+import { About } from "./components/About";
 import { NavMenu } from './components/NavMenu';
 import { Home } from './components/Home/Home';
 
