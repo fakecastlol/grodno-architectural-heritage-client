@@ -10,11 +10,10 @@ const NavMenu = () => {
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
-
     if (user) {
       setCurrentUser(user);
-      // setShowModeratorBoard(user.role.includes("Moderator"));
-      // setShowAdminBoard(user.role.includes("Admin"));
+      // setShowModeratorBoard(user.role.includes("2"));
+      setShowAdminBoard(user.user.role === 2);
     }
   }, []);
 
