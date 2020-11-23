@@ -1,82 +1,172 @@
-import React, { Component } from "react";
-import './identity.css';
+import React, { useState, useRef } from "react"
+import Form from "react-validation/build/form";
+import Input from "react-validation/build/input";
+import CheckButton from "react-validation/build/button";
+import { isEmail } from "validator";
 
-export class Register extends Component {
+import AuthService from "../../services/auth.service";
+import './identity.css'
 
-    constructor(props) {
-
-        super(props);
-
-        this.state = {
-            email: '',
-            password: ''
-        };
-
+const required = (value) => {
+    if (!value) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          This field is required!
+        </div>
+      );
     }
-
-    handleChangeEmail = (event) => {
-        let email = event.target.value;
-        this.setState({
-            email: email
-        });
+  };
+  
+  const validEmail = (value) => {
+    if (!isEmail(value)) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          This is not a valid email.
+        </div>
+      );
     }
-
-    handleChangePassword = (event) => {
-        let password = event.target.value;
-        this.setState({
-            password: password
-        });
+  };
+  
+  const vpassword = (value) => {
+    if (value.length < 6 || value.length > 40) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          The password must be between 6 and 40 characters.
+        </div>
+      );
     }
-    
-    handleChangeConfirmPassword = (event) => {
-        let confirmPassword = event.target.value;
-        this.setState({
-            confirmPassword: confirmPassword
-        });
-    }
+  };
+  
+  const Register = (props) => {
+    const form = useRef();
+    const checkBtn = useRef();
+  
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [successful, setSuccessful] = useState(false);
+    const [message, setMessage] = useState("");
+  
+    const onChangeEmail = (e) => {
+      const email = e.target.value;
+      setEmail(email);
+    };
+  
+    const onChangePassword = (e) => {
+      const password = e.target.value;
+      setPassword(password);
+    };
 
-    submit = (event) => {
-        event.preventDefault();
-       
-        console.log(this.state);
-
-        window.axios.post('https://localhost:5001/register', { email: this.state.email, password: this.state.password, confirmPassword: this.confirmPassword })
-            .then(response => {
-
-                localStorage.setItem('token', response.data.auth.access_token)
-                
-            }
-            );
-    }
-
-    render() {
-        return (
-            <div className="outer">
-            <div className="inner">
-            <form onSubmit={ this.submit }>
-                <h3>Register</h3>
-                <div className="form-group">
-                    <label>Email</label>
-                    <input type="email" className="form-control" placeholder="Enter email" onChange = { this.handleChangeEmail }/>
-                </div>
-
-                <div className="form-group">
-                    <label>Password</label>
-                    <input type="password" className="form-control" placeholder="Enter password" onChange = { this.handleChangePassword }/>
-                </div>
-
-                <div className="form-group">
-                    <label>Confirm password</label>
-                    <input type="confirm_password" className="form-control" placeholder="Enter password" onChange = { this.handleChangeConfirmPassword }/>
-                </div>
-
-                <button type="submit" className="btn btn-dark btn-lg btn-block" >Sign up</button>
-                <p className="forgot-password text-right">
-                    Already registered <a href="#">log in?</a>
-                </p>
-            </form>
-            </div>
-            </div>
+    const onChangeConfirmPassword = (e) => {
+        const confirmPassword = e.target.value;
+        setConfirmPassword(confirmPassword);
+      };
+  
+    const handleRegister = (e) => {
+      e.preventDefault();
+  
+      setMessage("");
+      setSuccessful(false);
+  
+      form.current.validateAll();
+  
+      if (checkBtn.current.context._errors.length === 0) {
+        AuthService.register(email, password, confirmPassword).then(
+          (response) => {
+            setMessage(response.data.message);
+            setSuccessful(true);
+          },
+          (error) => {
+            const resMessage =
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.message ||
+              error.toString();
+  
+            setMessage(resMessage);
+            setSuccessful(false);
+          }
         );
-    }
-}
+      }
+    };
+  
+    return (
+      <div className="outer">
+        <div className="inner">
+  
+          <Form onSubmit={handleRegister} ref={form}>
+              <h3> Register</h3>
+            {!successful && (
+              <div>
+                  
+                <div className="form-group">
+                  <label htmlFor="email">Email</label>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    name="email"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={onChangeEmail}
+                    validations={[required, validEmail]}
+                  />
+                </div>
+  
+                <div className="form-group">
+                  <label htmlFor="password">Password</label>
+                  <Input
+                    type="password"
+                    className="form-control"
+                    name="password"
+                    placeholder="Enter password"
+                    value={password}
+                    onChange={onChangePassword}
+                    validations={[required, vpassword]}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="password">Confirm password</label>
+                  <Input
+                    type="confirm_password"
+                    className="form-control"
+                    name="password"
+                    placeholder="Enter password"
+                    value={confirmPassword}
+                    onChange={onChangeConfirmPassword}
+                    validations={[required]}
+                  />
+                </div>
+  
+                <div className="form-group">
+                  <button className="btn btn-dark btn-lg btn-block">Sign Up</button>
+                </div>
+              </div>
+            )}
+  
+            {message && (
+              <div className="form-group">
+                <div
+                  className={
+                    successful ? "alert alert-success" : "alert alert-danger"
+                  }
+                  role="alert"
+                >
+                  {message}
+                </div>
+              </div>
+            )}
+            <CheckButton style={{ display: "none" }} ref={checkBtn} />
+
+            <p className="forgot-password text-right">
+                    Already registered <a href="/login">log in?</a>
+                </p>
+          </Form>
+        </div>
+      </div>
+    );
+  };
+  
+  export default Register;
+  
