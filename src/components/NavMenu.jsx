@@ -13,8 +13,8 @@ const NavMenu = () => {
 
     if (user) {
       setCurrentUser(user);
-      setShowModeratorBoard(user.roles.includes("ROLE_MODERATOR"));
-      setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
+      // setShowModeratorBoard(user.role.includes("Moderator"));
+      // setShowAdminBoard(user.role.includes("Admin"));
     }
   }, []);
 
@@ -72,12 +72,12 @@ const NavMenu = () => {
           <div className="navbar-nav ml-auto navbar-identity">
             <li className="nav-item">
               <Link to={"/profile"} className="nav-link">
-                {currentUser.username}
+                {currentUser.user.email}
               </Link>
             </li>
             <li className="nav-item">
               <a href="/login" className="nav-link" onClick={logOut}>
-                LogOut
+                Log Out
               </a>
             </li>
           </div>

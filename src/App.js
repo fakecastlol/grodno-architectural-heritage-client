@@ -15,14 +15,6 @@ import BoardAdmin from './components/Board/BoardAdmin'
 
 function App() {
 
-
-
-
-
-
-
-
-  
   return (<Router>
     <div className="App">
       <NavMenu />      

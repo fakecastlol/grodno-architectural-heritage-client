@@ -1,97 +1,137 @@
-import React, { Component } from "react";
+import React, { useState, useRef } from "react";
 import { Redirect, Route, withRouter } from "react-router-dom";
+
+import Form from "react-validation/build/form";
+import Input from "react-validation/build/input";
+import CheckButton from "react-validation/build/button";
 
 import AuthService from '../../services/auth.service'
 
 import './identity.css';
 
-class Login extends Component {
-
-    constructor(props){
-
-        super(props);
-    
-        this.state={
-          email:'',
-          password:'',
-          loggedIn:false,
-        };    
+const required = (value) => {
+    if (!value) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          This field is required!
+        </div>
+      );
     }
+  };
+  
+  const Login = (props) => {
+    const form = useRef();
+    const checkBtn = useRef();
+  
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
+  
+    const onChangeEmail = (e) => {
+      const email = e.target.value;
+      setEmail(email);
+    };
+  
+    const onChangePassword = (e) => {
+      const password = e.target.value;
+      setPassword(password);
+    };
+  
+    const handleLogin = (e) => {
+      e.preventDefault();
+  
+      setMessage("");
+      setLoading(true);
+  
+      form.current.validateAll();
+  
+      if (checkBtn.current.context._errors.length === 0) {
+        AuthService.login(email, password).then(
+          () => {
+            props.history.push("/profile");
+            window.location.reload();
+          },
+          (error) => {
+            const resMessage =
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.message ||
+              error.toString();
+  
+            setLoading(false);
+            setMessage(resMessage);
+          }
+        );
+      } else {
+        setLoading(false);
+      }
+    };
+  
+    return (
+      <div className="outer">
+        <div className="inner">  
+          <Form onSubmit={handleLogin} ref={form}>
+            <h3>Login</h3>
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <Input
+                type="email"
+                className="form-control"
+                name="email"
+                placeholder="Enter email"
+                value={email}
+                onChange={onChangeEmail}
+                validations={[required]}
+              />
+            </div>
+  
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <Input
+                type="password"
+                className="form-control"
+                name="password"
+                placeholder="Enter password"
+                value={password}
+                onChange={onChangePassword}
+                validations={[required]}
+              />
+            </div>
 
-    handleChangeEmail = (event) => {
-        let email = event.target.value;
-        this.setState({
-            email: email
-        });
-    }
-
-    handleChangePassword = (event) => {
-        let password = event.target.value;
-        this.setState({
-            password: password
-        });
-    }
-
-
-    componentDidMount() {
-        if(window.token){
-          this.setState({loggedIn:true});
-        }
-    }
-
-    submit = (event) => {
-        // this.setState({loggedIn:true})
-        event.preventDefault();
-        
-        console.log(this.state);
-
-        window.axios.post('https://localhost:5001/login',{email: this.state.email, password: this.state.password})
-        .then(response=>{
-           console.log(response);
-    
-           this.setState({loggedIn:true});
-    
-           localStorage.setItem('token',response.data.token)
-
-           this.props.history.push('/home');
-        //    Redirect.call(Index);
-        });
-    }
-    
-
-    render() {
-        return (
-            <div className="outer">
-            <div className="inner">
-            <form onSubmit={this.submit}>
-                <h3>Login</h3>
-
-                <div className="form-group">
-                    <label>Email</label>
-                    <input type="email" className="form-control" placeholder="Enter email" onChange = { this.handleChangeEmail }/>
-                </div>
-
-                <div className="form-group">
-                    <label>Password</label>
-                    <input type="password" className="form-control" placeholder="Enter password" onChange = { this.handleChangePassword }/>
-                </div>
-
-                <div className="form-group">
+            <div className="form-group">
                     <div className="custom-control custom-checkbox">
                         <input type="checkbox" className="custom-control-input" id="customCheck1" />
                         <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>
                     </div>
                 </div>
 
-                <button type="submit" className="btn btn-color btn-lg btn-block">Sign in</button>
-                <p className="forgot-password text-right">
-                    Forgot <a href="#">password?</a>
-                </p>
-            </form>
+            <div className="form-group">
+              <button className="btn btn-dark btn-lg btn-block" disabled={loading}>
+                {loading && (
+                  <span className="spinner-border spinner-border-sm"></span>
+                )}
+                <span>Login</span>
+              </button>
             </div>
-            </div>
-        );
-    }
-}
-
-export default withRouter(Login);
+  
+            {message && (
+              <div className="form-group">
+                <div className="alert alert-danger" role="alert">
+                  {message}
+                </div>
+              </div>
+            )}
+            <CheckButton style={{ display: "none" }} ref={checkBtn} />
+            <p className="forgot-password text-right">
+                   Forgot <a href="#">password?</a>
+            </p>
+          </Form>
+        </div>
+      </div>
+    );
+  };
+  
+  export default Login;
+  
