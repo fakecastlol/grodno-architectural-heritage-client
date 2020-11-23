@@ -35,23 +35,23 @@ export class Register extends Component {
         });
     }
 
-    handleConfirmPassword = (event) => {
-        // if (typeof input["password"] !== "undefined" && typeof input["confirm_password"] !== "undefined") {
-            let password = event.target.value;
-            let confirmPassword = event.target.value;
-            let errors = {};      
-            let isValid = true;
+    // handleConfirmPassword = (event) => {
+    //     // if (typeof input["password"] !== "undefined" && typeof input["confirm_password"] !== "undefined") {
+    //         let password = event.target.value;
+    //         let confirmPassword = event.target.value;
+    //         let errors = {};      
+    //         let isValid = true;
 
-            if (password != confirmPassword) {
-              isValid = false;
-              errors["password"] = "Passwords don't match.";
-            }
-        // }
-    }
+    //         if (password != confirmPassword) {
+    //           isValid = false;
+    //           errors["password"] = "Passwords don't match.";
+    //         }
+    //     // }
+    // }
 
     submit = (event) => {
         event.preventDefault();
-        this.handleConfirmPassword();
+        // this.handleConfirmPassword();
         console.log(this.state);
 
         window.axios.post('https://localhost:5001/register', { email: this.state.email, password: this.state.password, confirmPassword: this.confirmPassword })

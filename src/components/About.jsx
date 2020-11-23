@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 
-export class About extends Component{
-    static displayName = About.name;
+const About = () => {
+    // static displayName = About.name;
 
-    constructor(props){
+    // constructor(props){
 
-        super(props);
-    }
+    //     super(props);
+    // }
 
-    getUrl(){
+    const getUrl = () =>{
         window.axios.get('https://localhost:5001/about')
         .then(response => {  
             localStorage.setItem('token', response.data.auth.access_token)           
@@ -16,11 +16,14 @@ export class About extends Component{
         );
     }
 
-    render() {
+    // render( {
         return (
             <div style={{marginTop: "10em"}}>
               <h2>about page</h2>  
             </div>
         )
-    }
-}
+    // }
+    
+};
+
+export default About;

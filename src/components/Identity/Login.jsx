@@ -1,8 +1,11 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, Route, withRouter } from "react-router-dom";
+
+import AuthService from '../../services/auth.service'
+
 import './identity.css';
 
-export class Login extends Component {
+class Login extends Component {
 
     constructor(props){
 
@@ -50,6 +53,7 @@ export class Login extends Component {
     
            localStorage.setItem('token',response.data.token)
 
+           this.props.history.push('/home');
         //    Redirect.call(Index);
         });
     }
@@ -79,7 +83,7 @@ export class Login extends Component {
                     </div>
                 </div>
 
-                <button type="submit" className="btn btn-dark btn-lg btn-block">Sign in</button>
+                <button type="submit" className="btn btn-color btn-lg btn-block">Sign in</button>
                 <p className="forgot-password text-right">
                     Forgot <a href="#">password?</a>
                 </p>
@@ -89,3 +93,5 @@ export class Login extends Component {
         );
     }
 }
+
+export default withRouter(Login);
