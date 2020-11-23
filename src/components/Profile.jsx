@@ -2,11 +2,11 @@ import React from "react";
 import AuthService from "../services/auth.service";
 
 const Profile = () => {
-  const currentUser = AuthService.getCurrentUser();
+  const currentUser =  AuthService.getCurrentUser();
 
   return (
     <div className="container">
-      <header className="jumbotron">
+      <header className="jumbotron">      
         <h3>
           <strong>{currentUser.user.email}</strong> Profile 
         </h3>
@@ -21,11 +21,10 @@ const Profile = () => {
       <p>
         <strong>Email:</strong> {currentUser.user.email}
       </p>
-      <strong>Authorities:</strong>
-      <ul>
-        {currentUser.role &&
-          currentUser.role.map((role, index) => <li key={index}>{role}</li>)}
-      </ul>
+      <strong>Authorities:</strong> {currentUser.user.role} 
+        {/* // && currentUser.role.map
+          ((role) => <li key={index}>{role}</li>)} */}
+      
     </div>
   );
 };

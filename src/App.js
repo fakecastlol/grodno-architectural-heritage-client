@@ -4,7 +4,7 @@ import './App.css'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 
 import Login from "./components/Identity/Login"
-import { Register } from "./components/Identity/Register"
+import Register from "./components/Identity/Register"
 import About from "./components/About"
 import NavMenu from './components/NavMenu'
 import Home from './components/Home/Home'
