@@ -1,16 +1,28 @@
 import React from "react";
 import AuthService from "../services/auth.service";
 
+const container = {
+  marginTop: 100
+}
+
+const info ={
+  textAlign: 'left',
+  marginLeft: 350,
+  marginTop: 100
+}
+
 const Profile = () => {
   const currentUser =  AuthService.getCurrentUser();
 
   return (
-    <div className="container">
-      <header className="jumbotron">      
+    <div className="container" style={container}>
+      {/* <header className="jumbotron">       */}
         <h3>
-          <strong>{currentUser.user.email}</strong> Profile 
+          {/* <strong>{currentUser.user.email}</strong>  */}
+          Profile 
         </h3>
-      </header>
+      {/* </header> */}
+      <div className="info" style={info}>
       <p>
         <strong>Token:</strong> {currentUser.token.substring(0, 20)} ...{" "}
         {currentUser.token.substr(currentUser.token.length - 20)}
@@ -24,7 +36,7 @@ const Profile = () => {
       <strong>Authorities:</strong> {currentUser.user.role} 
         {/* // && currentUser.role.map
           ((role) => <li key={index}>{role}</li>)} */}
-      
+      </div>
     </div>
   );
 };
