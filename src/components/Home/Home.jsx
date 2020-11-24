@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import UserService from '../../services/user.service'
 
+const h1 ={
+  marginTop: 450
+}
+
 const Home = () => {
     const [content, setContent] = useState("");
   
@@ -22,9 +26,7 @@ const Home = () => {
   
     return (
       <div className="container">
-        <header className="jumbotron">
-          <h3>{content}</h3>
-        </header>
+          <h1 style={h1}>This applcation is under development</h1>
       </div>
     );
   };
