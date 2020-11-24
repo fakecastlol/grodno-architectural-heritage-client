@@ -1,29 +1,34 @@
-import React, {Component} from 'react';
+import React, { useEffect, useState } from 'react';
+import authHeader from '../services/auth-header';
+import axios from 'axios'
 
 const About = () => {
-    // static displayName = About.name;
+    const[content, setContent] = useState(""); 
 
-    // constructor(props){
-
-    //     super(props);
-    // }
-
-    const getUrl = () =>{
-        window.axios.get('https://localhost:5001/about')
-        .then(response => {  
-            localStorage.setItem('token', response.data.auth.access_token)           
-        }
-        );
+    const contentStyle = {
+        marginTop: 100,
+        color: 'black'
     }
 
-    // render( {
-        return (
-            <div style={{marginTop: "10em"}}>
-              <h2>about page</h2>  
-            </div>
-        )
-    // }
-    
-};
+    const getData = async() =>{
+        try{
+            const data = await  axios.get('https://localhost:5001/about');
+            console.log(data.data);
+            setContent(data.data);
+        }  catch(e){
+            console.log(e);
+        }
+        
+    }
 
+    useEffect (()  => {
+        getData();
+    }
+    );
+        return (
+            <div className="context" style={contentStyle}>
+              <h3>{content}</h3>
+            </div>
+        );
+   };
 export default About;
