@@ -9,6 +9,8 @@ import AdminService from "../../services/admin.service";
 import Axios from "axios";
 import authHeader from "../../services/auth-header";
 import { Redirect, Link } from "react-router-dom";
+import DropdownButton from 'react-bootstrap/DropdownButton'
+import Dropdown from 'react-bootstrap/Dropdown'
 
 const tableHeader1 = {
   backgroundColor: "#6c757d",
@@ -19,8 +21,14 @@ const tableHeader1 = {
 
 const userButton = {
   margin: 10,
-  // marginTop: 0
+  align: 'center'
 };
+
+const manageForm = {
+  display: 'flex',
+  flexDirection: 'row',
+  flexWrap: 'nowrap'
+}
 
 const BoardAdmin = () => {
   const [content, setContent] = useState("");
@@ -59,23 +67,43 @@ const BoardAdmin = () => {
   const columns = [
     { dataField: "email", text: "Email", sort: true },
     { dataField: "role", text: "Role", sort: true },
-    { dataField: "id", text: "Id" },
+    { dataField: "id", text: "Id",  },
     {
       btn: "id",
       text: "Manage",
-      formatter: (rowContent, row) => {
+      formatter: (row) => {
         return (
-          <div>
-            <button type="button" class="btn btn-secondary">
-              edit role
-            </button>
+          <div style={manageForm}>
+            <Dropdown>
+              <DropdownButton 
+                variant="secondary" 
+                id="dropdown-basic" 
+                title='role' 
+                style={userButton}>
+                    <Dropdown.Item as="button">User</Dropdown.Item>
+                    <Dropdown.Item as="button">Moderator</Dropdown.Item>
+                    <Dropdown.Item as="button">Admin</Dropdown.Item>
+              </DropdownButton>
+            </Dropdown>
+            <Dropdown>
+              <DropdownButton 
+                variant="secondary" 
+                id="dropdown-basic" 
+                title='ban' 
+                style={userButton}>
+                    <Dropdown.Item as="button">Day</Dropdown.Item>
+                    <Dropdown.Item as="button">Week</Dropdown.Item>
+                    <Dropdown.Item as="button">Month</Dropdown.Item>
+                    <Dropdown.Item as="button">Permanent</Dropdown.Item>
+              </DropdownButton>
+            </Dropdown>
             <button
               type="button"
-              class="btn btn-secondary"
+              class="btn btn-danger"
               onClick={() => handleDeleteOnClick(row)}
               style={userButton}
             >
-              delete user
+              delete
             </button>
           </div>
         );
@@ -105,10 +133,7 @@ const BoardAdmin = () => {
 
   return (
     <div className="container">
-      {/* <h3>{content}</h3> */}
-      {/* <h3>List of users:</h3> */}
       {loading ? (
-        // <div className="container">
         <div class="row" className="hdr">
           <div class="col-sm-12 btn btn-info" style={tableHeader1}>
             LIST OF USERS
