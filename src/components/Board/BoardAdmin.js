@@ -4,13 +4,12 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import * as ReactBootStrap from "react-bootstrap";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 
-import UserService from "../../services/user.service";
-import AdminService from "../../services/admin.service";
 import Axios from "axios";
 import authHeader from "../../services/auth-header";
-import { Redirect, Link } from "react-router-dom";
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import Dropdown from 'react-bootstrap/Dropdown'
+
+import "./board.css"
 
 const tableHeader1 = {
   backgroundColor: "#6c757d",
@@ -31,7 +30,6 @@ const manageForm = {
 }
 
 const BoardAdmin = () => {
-  const [content, setContent] = useState("");
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
 

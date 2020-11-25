@@ -3,10 +3,20 @@ import axios from "axios";
 const API_URL = "https://localhost:5001/";
 
 const register = (email, password) => {
-  return axios.post(API_URL + "register", {
-    email,
-    password,
-  });
+  return axios
+    .post(API_URL + "register", {
+      email,
+      password,
+    })
+    .then(() => login(email, password));
+  // .then((response) => {
+  //   console.log(response.data)
+  //   if (response.data.token) {
+  //     console.log(response.data.token)
+  //     localStorage.setItem("user", JSON.stringify(response.data));
+  //   }
+  //   return response;
+  // });
 };
 
 const login = (email, password) => {
@@ -19,8 +29,8 @@ const login = (email, password) => {
       if (response.data.token) {
         localStorage.setItem("user", JSON.stringify(response.data));
       }
-    console.log(response.data);
-      return response.data;
+      console.log(response.data);
+      return response;
     });
 };
 

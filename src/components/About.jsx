@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import authHeader from '../services/auth-header';
 import axios from 'axios'
 
 const About = () => {

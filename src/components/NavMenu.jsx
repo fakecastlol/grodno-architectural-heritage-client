@@ -1,27 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { Router, Link } from "react-router-dom";
 
-import AuthService from '../services/auth.service'
+import { logout } from "../actions/auth";
+import { clearMessage } from "../actions/message";
+import { history } from "../helpers/history";
 
 const NavMenu = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
   const [showAdminBoard, setShowAdminBoard] = useState(false);
-  const [currentUser, setCurrentUser] = useState(undefined);
+
+  const { user: currentUser } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      setCurrentUser(user);
-      // setShowModeratorBoard(user.role.includes("2"));
-      setShowAdminBoard(user.user.role === 2);
+    history.listen((location) => {
+      dispatch(clearMessage()); // clear message when changing location
+    });
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (currentUser) {
+      console.log(currentUser)
+      setShowModeratorBoard(currentUser.user.role === ("ROLE_MODERATOR"));
+      setShowAdminBoard(currentUser.user.role === 2);
     }
-  }, []);
+  }, [currentUser]);
 
   const logOut = () => {
-    AuthService.logout();
+    dispatch(logout());
   };
 
   return (
+    // <Router history={history}>
     <div>      
       <nav className="navbar navbar-expand-lg navbar-light fixed-top">
         <Link to={"/"} className="navbar-brand navbar-logo">
@@ -98,6 +109,7 @@ const NavMenu = () => {
         </div>
       </nav>
       </div>
+      // </Router>
   );
 };
 

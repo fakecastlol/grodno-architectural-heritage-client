@@ -1,10 +1,13 @@
 import React, { useState, useRef } from "react"
+import { useDispatch, useSelector } from "react-redux";
+
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 
-import AuthService from "../../services/auth.service";
+import {register} from '../../actions/auth'
+
 import './identity.css'
 
 const required = (value) => {
@@ -45,8 +48,10 @@ const required = (value) => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [successful, setSuccessful] = useState(false);
-    const [message, setMessage] = useState("");
-  
+
+    const {message} = useSelector(state => state.message);
+    const dispatch = useDispatch();
+
     const onChangeEmail = (e) => {
       const email = e.target.value;
       setEmail(email);
@@ -63,32 +68,30 @@ const required = (value) => {
       };
   
     const handleRegister = (e) => {
+      if (password !== confirmPassword) {
+        alert("Passwords don't match");
+      } else {
+              
       e.preventDefault();
-  
-      setMessage("");
+        //e.stopPropogation();
       setSuccessful(false);
   
       form.current.validateAll();
   
       if (checkBtn.current.context._errors.length === 0) {
-        AuthService.register(email, password, confirmPassword).then(
-          (response) => {
-            setMessage(response.data.message);
+        dispatch(register(email, password, confirmPassword))
+          .then(() => {
             setSuccessful(true);
-          },
-          (error) => {
-            const resMessage =
-              (error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-              error.message ||
-              error.toString();
-  
-            setMessage(resMessage);
+            props.history.push("/home");
+            // window.location.reload();
+          })
+          .catch(() => {
             setSuccessful(false);
-          }
-        );
+          });
       }
+      
+      }
+      
     };
   
     return (
@@ -129,7 +132,7 @@ const required = (value) => {
                 <div className="form-group">
                   <label htmlFor="password">Confirm password</label>
                   <Input
-                    type="confirm_password"
+                    type="password"
                     className="form-control"
                     name="password"
                     placeholder="Enter password"

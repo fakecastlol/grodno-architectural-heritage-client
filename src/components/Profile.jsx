@@ -1,5 +1,6 @@
 import React from "react";
-import AuthService from "../services/auth.service";
+import {useSelector} from 'react-redux'
+import { Redirect } from 'react-router-dom';
 
 const container = {
   marginTop: 100
@@ -12,16 +13,17 @@ const info ={
 }
 
 const Profile = () => {
-  const currentUser =  AuthService.getCurrentUser();
+  const { user: currentUser } = useSelector((state) => state.auth);
+
+  if (!currentUser) {
+    return <Redirect to="/login" />;
+  }
 
   return (
     <div className="container" style={container}>
-      {/* <header className="jumbotron">       */}
         <h3>
-          {/* <strong>{currentUser.user.email}</strong>  */}
           Profile 
         </h3>
-      {/* </header> */}
       <div className="info" style={info}>
       <p>
         <strong>Token:</strong> {currentUser.token.substring(0, 20)} ...{" "}
@@ -34,8 +36,6 @@ const Profile = () => {
         <strong>Email:</strong> {currentUser.user.email}
       </p>
       <strong>Authorities:</strong> {currentUser.user.role} 
-        {/* // && currentUser.role.map
-          ((role) => <li key={index}>{role}</li>)} */}
       </div>
     </div>
   );
