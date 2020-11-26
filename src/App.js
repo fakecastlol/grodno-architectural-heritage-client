@@ -12,6 +12,7 @@ import Profile from './components/Profile'
 import BoardUser from './components/Board/BoardUser'
 import BoardModerator from './components/Board/BoardModerator'
 import BoardAdmin from './components/Board/BoardAdmin'
+import ManageUser from './components/Identity/ManageUser/ManageUser'
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
             <Route path="/user" component={BoardUser} />
             <Route path="/mod" component={BoardModerator} />
             <Route path="/admin" component={BoardAdmin} />
+            <Route path="/manageuser" component={ManageUser}/>
           </Switch>
     </div>
     </Router>

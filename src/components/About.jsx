@@ -17,7 +17,6 @@ const About = () => {
         }  catch(e){
             console.log(e);
         }
-        
     }
 
     useEffect (()  => {

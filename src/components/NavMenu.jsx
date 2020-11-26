@@ -32,7 +32,6 @@ const NavMenu = () => {
   };
 
   return (
-    // <Router history={history}>
     <div>      
       <nav className="navbar navbar-expand-lg navbar-light fixed-top">
         <Link to={"/"} className="navbar-brand navbar-logo">
@@ -51,6 +50,13 @@ const NavMenu = () => {
               About
             </Link>
           </li>
+
+          <li className="nav-item">
+              <Link to={"/manageuser"} className="nav-link">
+                Manage user
+              </Link>
+            </li>
+
 
           {showModeratorBoard && (
             <li className="nav-item">
@@ -76,7 +82,6 @@ const NavMenu = () => {
             </li>
           )}
         </ul>
-        {/* </div> */}
 
         {currentUser ? (
           <div className="navbar-nav ml-auto navbar-identity">
@@ -109,7 +114,6 @@ const NavMenu = () => {
         </div>
       </nav>
       </div>
-      // </Router>
   );
 };
 
