@@ -28,7 +28,7 @@ function App() {
             <Route path="/user" component={BoardUser} />
             <Route path="/mod" component={BoardModerator} />
             <Route path="/admin" component={BoardAdmin} />
-            <Route path="/manageuser" component={ManageUser}/>
+            <Route path="/manageuser/:id" component={ManageUser}/>
           </Switch>
     </div>
     </Router>

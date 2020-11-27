@@ -6,28 +6,16 @@ const BoardUser = () => {
   const [content, setContent] = useState("");
 
   useEffect(() => {
-    UserService.getUserBoard().then(
-      (response) => {
-        setContent(response.data);
-      },
-      (error) => {
-        const _content =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-
-        setContent(_content);
-      }
-    );
   }, []);
 
+  const containerStyle = {
+    marginTop: 100,
+    color: 'black'
+  }
+
   return (
-    <div className="container">
-      <header className="jumbotron">
-        <h3>{content}</h3>
-      </header>
+    <div className="container" style={containerStyle}>
+        <h3>User page</h3>
     </div>
   );
 };

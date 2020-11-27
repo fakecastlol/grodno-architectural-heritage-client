@@ -21,7 +21,7 @@ const Profile = () => {
   }
 
   const formatRegistration = moment(currentUser.user.registrationDate).format('MMMM Do YYYY');
-  const formatLastVisitet = moment(currentUser.user.lastVisited).format('MMMM Do YYYY, h:mm:ss a');
+  const formatLastVisited = moment(currentUser.user.lastVisited).format('MMMM Do YYYY, h:mm:ss a');
 
 
   return (
@@ -46,7 +46,7 @@ const Profile = () => {
         <strong>Registration date:</strong> {formatRegistration}
       </p>
       <p>
-        <strong>Last visited:</strong> {formatLastVisitet}
+        <strong>Last visited:</strong> {formatLastVisited}
       </p>
       <p>
         <strong>Location:</strong> {currentUser.user.location}

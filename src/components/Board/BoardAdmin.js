@@ -7,10 +7,13 @@ import { Router, Link } from "react-router-dom";
 
 import Axios from "axios";
 import authHeader from "../../services/auth-header";
-import DropdownButton from 'react-bootstrap/DropdownButton'
-import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from "react-bootstrap/DropdownButton";
+import Dropdown from "react-bootstrap/Dropdown";
 
-import "./board.css"
+import "./board.css";
+import adminService from "../../services/admin.service";
+import { getUser } from "../../actions/manageUser";
+import { connect, useDispatch } from "react-redux";
 
 const tableHeader1 = {
   backgroundColor: "#6c757d",
@@ -20,27 +23,32 @@ const tableHeader1 = {
 };
 
 const userButton = {
-  margin: 'auto',
-  align: 'center'
+  margin: "auto",
+  align: "center",
 };
 
 const manageForm = {
-  display: 'flex',
-  flexDirection: 'row',
-  flexWrap: 'nowrap'
-}
+  display: "flex",
+  flexDirection: "row",
+  flexWrap: "nowrap",
+};
 
 const BoardAdmin = (props) => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState({});
   const [loading, setLoading] = useState(false);
+  const [pageSize, setPageSize] = useState(10);
+  const [pageNumber, setPageNumber] = useState(1);
 
-  const getUserData = async () => {
-    // AdminService.getUsers();
+  const dispatch = useDispatch();
+
+  const getPagedData = async () => {
     try {
-      const data = await Axios.get("https://localhost:5001/users", {
+      const data = await Axios.get("https://localhost:5001/pusers", {
         headers: authHeader(),
+        params: { pageNumber },
       });
       console.log(data);
+
       setUsers(data.data);
       setLoading(true);
     } catch (e) {
@@ -48,49 +56,66 @@ const BoardAdmin = (props) => {
     }
   };
 
-  const deleteUser = async ( {id} ) => {
-    // AdminService.getUsers();
-    try {
-      console.log(id);
-      const data = await Axios.delete("https://localhost:5001/delete", {
-        headers: authHeader(),
-        data: { id },
-      });
-    } catch (e) {}
-  };
+  // const getUserData = async () => {
+  //   // AdminService.getUsers();
+  //   try {
+  //     const data = await Axios.get("https://localhost:5001/users", {
+  //       headers: authHeader(),
+  //     });
+  //     console.log(data);
+  //     setUsers(data.data);
+  //     setLoading(true);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
-  const handleDeleteOnClick = (row) => {
-    deleteUser(row);
-  };
+  // const deleteUser = async ( {id} ) => {
+  //   // AdminService.getUsers();
+  //   try {
+  //     console.log(id);
+  //     const data = await Axios.delete("https://localhost:5001/delete", {
+  //       headers: authHeader(),
+  //       data: { id },
+  //     });
+  //   } catch (e) {}
+  // };
 
+  // const handleDeleteOnClick = (row) => {
+  //   deleteUser(row);
+  // };
 
-  const getUser = async ( {id} ) => {
-    try {
-      console.log(id);
-      const data = await Axios.get("https://localhost:5001/getuser", {
-        headers: authHeader(),
-        data: { data },
-      });
-    } catch (e) {}
-  }
+  // const getUser = async (id) => {
+  //   try {
+  //     const data = await Axios.get("https://localhost:5001/getuser", {
+  //       headers: authHeader(),
+  //       params: { id },
+  //     });
+  //     console.log(data);
+  //   } catch (e) {}
+  // };
 
-  const handleActionsOnClick = (row) => {
-    getUser(row)
-    // props.history.push("/manageuser");
+  const handleActionsOnClick = (id) => {
+    console.log(id);
+    // adminService.getUser(id);
+    // console.log(props.onGetUser);
+    // dispatch(getUser(id));
+    props.history.push(`/manageuser/${id}`);
   };
 
   const columns = [
     { dataField: "email", text: "Email", sort: true },
     { dataField: "role", text: "Role", sort: true },
-    { dataField: "id", text: "Id",  },
-    { dataField: 'login', text: "Login", sort: true},
+    { dataField: "id", text: "Id" },
+    { dataField: "login", text: "Login", sort: true },
     {
       btn: "id",
+      dataField: "id",
       text: "Manage",
-      formatter: (row) => {
+      formatter: (id) => {
         return (
           <div style={manageForm}>
-             {/* <Dropdown>
+            {/* <Dropdown>
               <DropdownButton 
                 variant="secondary" 
                 id="dropdown-basic" 
@@ -113,20 +138,20 @@ const BoardAdmin = (props) => {
                     <Dropdown.Item as="button">Permanent</Dropdown.Item>
               </DropdownButton>
             </Dropdown> */}
-            <button
+            {/* <button
               type="button"
               class="btn btn-danger"
               onClick={() => handleDeleteOnClick(row)}
               style={userButton}
             >
               delete
-            </button> 
+            </button>  */}
             <button
               type="button"
               class="btn btn-secondary"
-              onClick={() => handleActionsOnClick(row)}
+              onClick={() => handleActionsOnClick(id)}
               style={userButton}
-              >
+            >
               actions
             </button>
           </div>
@@ -136,23 +161,8 @@ const BoardAdmin = (props) => {
   ];
 
   useEffect(() => {
-    // UserService.getAdminBoard().then(
-    //   (response) => {
-    //     setContent(response.data);
-    getUserData();
-    //   },
-    //   (error) => {
-    //     const _content =
-    //       (error.response &&
-    //         error.response.data &&
-    //         error.response.data.message) ||
-    //       error.message ||
-    //       error.toString();
-
-    //     setContent(_content);
-    //   }
-
-    // );
+    console.log("pagedata");
+    getPagedData();
   }, []);
 
   return (
@@ -162,15 +172,25 @@ const BoardAdmin = (props) => {
           <div class="col-sm-12 btn btn-info" style={tableHeader1}>
             LIST OF USERS
           </div>
-
+          {console.log(users)}
           <BootstrapTable
             striped
             bordered
             hover
             keyField="id"
-            data={users}
+            data={users?.itemList || []}
             columns={columns}
-            pagination={paginationFactory()}
+            pagination={paginationFactory({
+              sizePerPage: pageSize,
+              page: pageNumber,
+              totalSize: users?.count,
+              onPageChange: (pageNumber, pageSize) => {
+                console.log("gugu", pageNumber, pageSize);
+                setPageNumber(pageNumber);
+                setPageSize(pageSize);
+                getPagedData();
+              },
+            })}
             filterFactory={filterFactory()}
           />
         </div>

@@ -51,12 +51,6 @@ const NavMenu = () => {
             </Link>
           </li>
 
-          <li className="nav-item">
-              <Link to={"/manageuser"} className="nav-link">
-                Manage user
-              </Link>
-            </li>
-
 
           {showModeratorBoard && (
             <li className="nav-item">
