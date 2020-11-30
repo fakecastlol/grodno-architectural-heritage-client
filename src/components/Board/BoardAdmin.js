@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import * as ReactBootStrap from "react-bootstrap";
@@ -6,7 +6,7 @@ import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import { Router, Link } from "react-router-dom";
 
 import Axios from "axios";
-import authHeader from "../../services/auth-header";
+import authHeader from "../../helpers/auth-header";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 
@@ -39,22 +39,37 @@ const BoardAdmin = (props) => {
   const [pageSize, setPageSize] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
 
+  console.log("statePage", pageNumber)
+
   const dispatch = useDispatch();
 
-  const getPagedData = async () => {
+  const getPagedData = useCallback(async (pageNumber) => {
+    console.log(pageNumber)
     try {
       const data = await Axios.get("https://localhost:5001/pusers", {
         headers: authHeader(),
         params: { pageNumber },
       });
-      console.log(data);
+      // console.log(data);
 
       setUsers(data.data);
       setLoading(true);
     } catch (e) {
       console.log(e);
     }
-  };
+  },[]) 
+  
+  useEffect(() => {
+    console.log("pagedata");
+    getPagedData(pageNumber);
+  }, [getPagedData, pageNumber]);
+
+  const handlePageChange = (pageNumber, pageSize) => {
+    console.log("handleChange", pageNumber, pageSize);
+    setPageNumber(pageNumber);
+    setPageSize(pageSize);
+    // getPagedData();
+  }
 
   // const getUserData = async () => {
   //   // AdminService.getUsers();
@@ -160,10 +175,7 @@ const BoardAdmin = (props) => {
     },
   ];
 
-  useEffect(() => {
-    console.log("pagedata");
-    getPagedData();
-  }, []);
+
 
   return (
     <div className="container">
@@ -184,12 +196,7 @@ const BoardAdmin = (props) => {
               sizePerPage: pageSize,
               page: pageNumber,
               totalSize: users?.count,
-              onPageChange: (pageNumber, pageSize) => {
-                console.log("gugu", pageNumber, pageSize);
-                setPageNumber(pageNumber);
-                setPageSize(pageSize);
-                getPagedData();
-              },
+              onPageChange: handlePageChange,
             })}
             filterFactory={filterFactory()}
           />

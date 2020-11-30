@@ -3,12 +3,12 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 
-import Login from "./components/Identity/Login"
-import Register from "./components/Identity/Register"
+import Login from "./containers/Login"
+import Register from "./containers/Register"
 import About from "./components/About"
-import NavMenu from './components/NavMenu'
+import NavMenu from './containers/NavMenu'
 import Home from './components/Home/Home'
-import Profile from './components/Profile'
+import Profile from './containers/Profile'
 import BoardUser from './components/Board/BoardUser'
 import BoardModerator from './components/Board/BoardModerator'
 import BoardAdmin from './components/Board/BoardAdmin'

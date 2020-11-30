@@ -1,6 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 
-import { GET_USER_DATA } from "../actions/types";
+import { GET_USER_DATA } from "../constants/action.types";
 
 const initialState = { isLoading: true };
 

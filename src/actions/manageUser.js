@@ -1,4 +1,4 @@
-import { GET_USER_DATA, SET_MESSAGE } from "./types";
+import { GET_USER_DATA, SET_MESSAGE } from "../constants/action.types";
 
 import AdminService from "../services/admin.service";
 
