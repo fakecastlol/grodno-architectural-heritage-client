@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useCallback } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
-import paginationFactory from "react-bootstrap-table2-paginator";
+import paginationFactory, { PaginationProvider, PaginationListStandalone } from "react-bootstrap-table2-paginator";
 import * as ReactBootStrap from "react-bootstrap";
-import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
-import { Router, Link } from "react-router-dom";
+import filterFactory from "react-bootstrap-table2-filter";
+// import { Router, Link } from "react-router-dom";
 
 import Axios from "axios";
 import authHeader from "../../helpers/auth-header";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import Dropdown from "react-bootstrap/Dropdown";
+// import DropdownButton from "react-bootstrap/DropdownButton";
+// import Dropdown from "react-bootstrap/Dropdown";
 
 import "./board.css";
-import adminService from "../../services/admin.service";
-import { getUser } from "../../actions/manageUser";
-import { connect, useDispatch } from "react-redux";
+// import adminService from "../../services/admin.service";
+// import { getUser } from "../../actions/manageUser";
+// import { connect, useDispatch } from "react-redux";
 
 const tableHeader1 = {
   backgroundColor: "#6c757d",
@@ -34,42 +34,41 @@ const manageForm = {
 };
 
 const BoardAdmin = (props) => {
-  const [users, setUsers] = useState({});
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pageSize, setPageSize] = useState(10);
-  const [pageNumber, setPageNumber] = useState(1);
+  const [page, setPage] = useState(1);
 
-  console.log("statePage", pageNumber)
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const getPagedData = useCallback(async (pageNumber) => {
-    console.log(pageNumber)
+  const getPagedData = useCallback(async (params = {}) => {
     try {
+      setLoading(true);
       const data = await Axios.get("https://localhost:5001/pusers", {
         headers: authHeader(),
-        params: { pageNumber },
+        params,
       });
-      // console.log(data);
 
       setUsers(data.data);
-      setLoading(true);
+      setLoading(false);
     } catch (e) {
+      setLoading(false)
       console.log(e);
     }
-  },[]) 
-  
-  useEffect(() => {
-    console.log("pagedata");
-    getPagedData(pageNumber);
-  }, [getPagedData, pageNumber]);
+  },[])
 
-  const handlePageChange = (pageNumber, pageSize) => {
-    console.log("handleChange", pageNumber, pageSize);
-    setPageNumber(pageNumber);
-    setPageSize(pageSize);
-    // getPagedData();
-  }
+  useEffect(() => {
+    getPagedData({page, pageSize});
+  }, [getPagedData, page, pageSize]);
+
+
+
+  const handleTableChange = useCallback((type, options) => {
+    const { page, sizePerPage } = options;
+    setPage(page);
+    setPageSize(sizePerPage);
+  }, []);
 
   // const getUserData = async () => {
   //   // AdminService.getUsers();
@@ -179,32 +178,45 @@ const BoardAdmin = (props) => {
 
   return (
     <div className="container">
-      {loading ? (
-        <div class="row" className="hdr">
-          <div class="col-sm-12 btn btn-info" style={tableHeader1}>
-            LIST OF USERS
-          </div>
-          {console.log(users)}
-          <BootstrapTable
-            striped
-            bordered
-            hover
-            keyField="id"
-            data={users?.itemList || []}
-            columns={columns}
-            pagination={paginationFactory({
-              sizePerPage: pageSize,
-              page: pageNumber,
-              totalSize: users?.count,
-              onPageChange: handlePageChange,
-            })}
-            filterFactory={filterFactory()}
-          />
-        </div>
-      ) : (
-        // </div>
-        <ReactBootStrap.Spinner animation="border" />
-      )}
+    <PaginationProvider
+          pagination={
+            paginationFactory({
+              custom: true,
+              page,
+              sizePerPage: setPageSize,
+              totalSize: users.count
+            })
+          }
+        >
+          {
+            ({
+              paginationProps,
+              paginationTableProps
+            }) => (
+              <div>
+                <div>
+                  <p>Current Page: { paginationProps.page }</p>
+                  <p>Current SizePerPage: { paginationProps.sizePerPage }</p>
+                </div>
+                {
+                loading
+                  ? <ReactBootStrap.Spinner animation="border" />
+                  : <BootstrapTable
+                      remote
+                      keyField="id"
+                      data={ users.itemList ?? [] }
+                      columns={ columns }
+                      onTableChange={ handleTableChange }
+                      { ...paginationTableProps }
+                    />
+                }
+                <PaginationListStandalone
+                    { ...paginationProps }
+                  />
+              </div>
+            )
+          }
+        </PaginationProvider>
     </div>
   );
 };
