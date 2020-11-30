@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import axios from "axios";
 import "./index.css";
 import App from "./App";
-import * as serviceWorker from "./services/serviceWorker";
+// import * as serviceWorker from "./services/serviceWorker";
 import store from "./helpers/store";
 
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
@@ -22,4 +22,4 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
-serviceWorker.unregister();
+// serviceWorker.unregister();
