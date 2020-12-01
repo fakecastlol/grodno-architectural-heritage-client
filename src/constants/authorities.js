@@ -1,4 +1,4 @@
-const roleToString = (role) => {
+export const roleToString = (role) => {
     switch (role) {
         case 2:
             return "admin"
@@ -10,5 +10,3 @@ const roleToString = (role) => {
             return "user" 
     }
 }
-
-export default roleToString
