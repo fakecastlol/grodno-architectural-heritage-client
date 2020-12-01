@@ -8,7 +8,7 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
-import roleToString from "../../../constants/authorities"
+import {roleToString} from "../../../constants/authorities"
 
 const inner = {
   width: "auto"

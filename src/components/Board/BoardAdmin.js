@@ -9,6 +9,8 @@ import authHeader from "../../helpers/auth-header";
 import "./board.css";
 import '../../index.css'
 import authName from '../../constants/authorities'
+import {roleToString} from '../../constants/authorities'
+
 
 const inner = {
   width: "auto"
@@ -37,7 +39,7 @@ const BoardAdmin = (props) => {
   const [loading, setLoading] = useState(false);
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(1);
-
+   
 
   // const dispatch = useDispatch();
 
@@ -48,7 +50,8 @@ const BoardAdmin = (props) => {
         headers: authHeader(),
         params,
       });
-
+      //data.data.role = authorities.roleStringToString(data.data.role);
+      console.log(data.data);
       setUsers(data.data);
       setLoading(false);
     } catch (e) {
@@ -77,13 +80,16 @@ const BoardAdmin = (props) => {
 
   const columns = [
     { dataField: "email", text: "Email", sort: true },
-    { dataField: "role", text: "Role", sort: true },
+    { dataField: 'role', text: "Role", sort: true, 
+      formatter: (role) => {
+          return roleToString(role);      
+    }},
     { dataField: "id", text: "Id" },
     { dataField: "login", text: "Login", sort: true },
     {
       btn: "id",
       dataField: "id",
-      text: "Manage",
+      text: "Action",
       formatter: (id) => {
         return (
           <div style={manageForm}>
@@ -93,7 +99,7 @@ const BoardAdmin = (props) => {
               onClick={() => handleActionsOnClick(id)}
               style={userButton}
             >
-              actions
+              profile
             </button>
           </div>
         );
@@ -104,9 +110,9 @@ const BoardAdmin = (props) => {
 
 
   return (
-    <div className="outer">
-    <div className="inner" style={inner}>
-    {/* <div className="container"> */}
+    // <div className="outer">
+    // <div className="inner" style={inner}>
+    /* <div className="container"> */
 
     <PaginationProvider
           pagination={
@@ -123,16 +129,16 @@ const BoardAdmin = (props) => {
               paginationProps,
               paginationTableProps
             }) => (
-              <div>
+              <div className="container">
                 {
                 loading
                   ? <ReactBootStrap.Spinner animation="border" />
                   : 
-                  <div className="container">
+                  // <div >
                     <div class="row" className="hdr">
-                          <div class="col-sm-12 btn btn-info" style={tableHeader1}> 
-                            {`LIST OF USERS`}
-                          </div>
+                      <div class="col-sm-12 btn btn-info" style={tableHeader1}> 
+                        {`LIST OF USERS`}
+                      </div>
                     <BootstrapTable
                       bordered
                       hover
@@ -142,9 +148,10 @@ const BoardAdmin = (props) => {
                       columns={ columns }
                       onTableChange={ handleTableChange }
                       { ...paginationTableProps }
+                      // filterFactory={filterFactory()}
                     />
                   </div>
-                  </div>
+                  // </div>
                 }
                 <PaginationListStandalone
                     { ...paginationProps }
@@ -153,8 +160,8 @@ const BoardAdmin = (props) => {
             )
           }
         </PaginationProvider>
-    </div>
-  </div>
+  //   </div>
+  // </div>
   // </div>
   );
 };
