@@ -62,7 +62,7 @@
 }
 
 .fileUploader {
-  border: 1px solid #e1e1e1;
+  /* border: 1px solid #e1e1e1; */
 }
 
 .fileContainer {
@@ -197,4 +197,12 @@
   background-repeat: no-repeat;
   background-position: 50% 23%;
   background-size: 25%;
+}
+
+.fields {
+  margin-top: 1em;
+}
+
+.upload-file {
+  display: flex
 }
