@@ -6,6 +6,8 @@ export const LOGOUT = "LOGOUT";
 
 export const GET_USER_DATA = "GET_USER_DATA";
 
+export const UPDATE_USER_PROFILE = "UPDATE_USER_PROFILE";
+
 export const SET_MESSAGE = "SET_MESSAGE";
 export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
 
