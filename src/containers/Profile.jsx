@@ -91,8 +91,9 @@ const Profile = () => {
     setFormData((profile) => ({ ...profile, [fieldName]: data }));
   };
 
-  const handleSwitchViewProfile = () => {
+  const handleSwitchViewProfile = async () => {
     setIsSwitchOn(!isSwitchOn);
+    await dispatch(getUser(currentUser.user.id));
   };
 
   const handleApplyChanges = (e) => {
@@ -109,7 +110,7 @@ const Profile = () => {
     "MMMM Do YYYY"
   );
   const formatLastVisited = moment(currentUser.user.lastVisited).format(
-    "MMMM Do YYYY, h:mm:ss a"
+    "MMMM Do YYYY, h:mm a"
   );
 
   const uploadImage = (files) => {
@@ -135,7 +136,8 @@ const Profile = () => {
 
   // const handleUploadImage = (picture) => {
   //   uploadImage(picture);
-  // }
+  //   console.log("deleted");
+  // };
 
   if (isLoading) return <div></div>;
 
@@ -147,15 +149,14 @@ const Profile = () => {
           <div className="info" style={info}>
             {isSwitchOn ? (
               <div>
-
-              <button
-                type="submit"
-                class="btn btn-secondary upload-file"
-                style={applyStyle}
-                // onClick={handleUploadImage}
-              >
-                {`Upload file`}
-              </button>
+                <button
+                  type="submit"
+                  class="btn btn-secondary upload-file"
+                  style={applyStyle}
+                  // onClick={handleUploadImage}
+                >
+                  {`Upload file`}
+                </button>
 
                 <ImageUploader
                   withIcon={false}
@@ -167,119 +168,124 @@ const Profile = () => {
                   fileSizeError=" file size is too big"
                 />
 
-             
-              
-
                 <div className="fields">
-                <div style={pStyle}>
-                  <strong>Email:</strong>
-                  <div
-                    className="form-group"
-                    // style={formStyle}
-                  >
-                    <Input
-                      type="email"
-                      className="form-control"
-                      name="email"
-                      value={formData.email}
-                      style={formStyle}
-                      onChange={(e) => onChangeFormData(e, "email")}
-                    />
+                  <div style={pStyle}>
+                    <strong>Email:</strong>
+                    <div
+                      className="form-group"
+                      // style={formStyle}
+                    >
+                      <Input
+                        type="email"
+                        className="form-control"
+                        name="email"
+                        value={formData.email}
+                        style={formStyle}
+                        onChange={(e) => onChangeFormData(e, "email")}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div style={pStyle}>
-                  <strong>First name:</strong>
-                  <div
-                    className="form-group"
-                    // style={formStyle}
-                  >
-                    <Input
-                      type="text"
-                      className="form-control"
-                      name="text"
-                      value={formData.firstName}
-                      style={formStyle}
-                      onChange={(e) => onChangeFormData(e, "firstName")}
-                    />
+                  <div style={pStyle}>
+                    <strong>First name:</strong>
+                    <div
+                      className="form-group"
+                      // style={formStyle}
+                    >
+                      <Input
+                        type="text"
+                        className="form-control"
+                        name="text"
+                        value={formData.firstName}
+                        style={formStyle}
+                        onChange={(e) => onChangeFormData(e, "firstName")}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div style={pStyle}>
-                  <strong>Last name:</strong>
-                  <div
-                    className="form-group"
-                    // style={formStyle}
-                  >
-                    <Input
-                      type="text"
-                      className="form-control"
-                      name="text"
-                      value={formData.lastName}
-                      style={formStyle}
-                      onChange={(e) => onChangeFormData(e, "lastName")}
-                    />
+                  <div style={pStyle}>
+                    <strong>Last name:</strong>
+                    <div
+                      className="form-group"
+                      // style={formStyle}
+                    >
+                      <Input
+                        type="text"
+                        className="form-control"
+                        name="text"
+                        value={formData.lastName}
+                        style={formStyle}
+                        onChange={(e) => onChangeFormData(e, "lastName")}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div style={pStyle}>
-                  <strong>Login:</strong>
-                  <div
-                    className="form-group"
-                    // style={formStyle}
-                  >
-                    <Input
-                      type="text"
-                      className="form-control"
-                      name="text"
-                      value={formData.login}
-                      style={formStyle}
-                      onChange={(e) => onChangeFormData(e, "login")}
-                    />
+                  <div style={pStyle}>
+                    <strong>Login:</strong>
+                    <div
+                      className="form-group"
+                      // style={formStyle}
+                    >
+                      <Input
+                        type="text"
+                        className="form-control"
+                        name="text"
+                        value={formData.login}
+                        style={formStyle}
+                        onChange={(e) => onChangeFormData(e, "login")}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div style={pStyle}>
-                  <strong>Location:</strong>
-                  <div
-                    className="form-group"
-                    // style={formStyle}
-                  >
-                    <Input
-                      type="text"
-                      className="form-control"
-                      name="text"
-                      value={formData.location}
-                      style={formStyle}
-                      onChange={(e) => onChangeFormData(e, "location")}
-                    />
+                  <div style={pStyle}>
+                    <strong>Location:</strong>
+                    <div
+                      className="form-group"
+                      // style={formStyle}
+                    >
+                      <Input
+                        type="text"
+                        className="form-control"
+                        name="text"
+                        value={formData.location}
+                        style={formStyle}
+                        onChange={(e) => onChangeFormData(e, "location")}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
               </div>
             ) : (
               <>
                 <p>
                   <strong>Email:</strong> {userField.email}
                 </p>
-                <p>
-                  <strong>First name:</strong> {userField.firstName}
-                </p>
-                <p>
-                  <strong>Last name:</strong> {userField.lastName}
-                </p>
-                <p>
-                  <strong>Login:</strong> {userField.login}
-                </p>
+                {userField.firstName && (
+                  <p>
+                    <strong>First name:</strong> {userField.firstName}
+                  </p>
+                )}
+                {userField.lastName && (
+                  <p>
+                    <strong>Last name:</strong> {userField.lastName || ""}
+                  </p>
+                )}
+                {userField.login && (
+                  <p>
+                    <strong>Login:</strong> {userField.login || ""}
+                  </p>
+                )}
                 <p>
                   <strong>Registration date:</strong> {formatRegistration}
                 </p>
                 <p>
                   <strong>Last visited:</strong> {formatLastVisited}
                 </p>
-                <p>
-                  <strong>Location:</strong> {userField.location}
-                </p>
+                {userField.location && (
+                  <p>
+                    <strong>Location:</strong> {userField.location || ""}
+                  </p>
+                )}
                 <p>
                   <strong>Article count:</strong> {userField.articleCount}
                 </p>
@@ -296,7 +302,9 @@ const Profile = () => {
             <button
               type="button"
               class="btn btn-secondary"
-              onClick={() => handleSwitchViewProfile()}
+              onClick={() => {
+                handleSwitchViewProfile();
+              }}
               style={editStyle}
             >
               {isSwitchOn ? "Close" : "Edit infomation"}
