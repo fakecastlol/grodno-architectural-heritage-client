@@ -8,11 +8,11 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
-import {roleToString} from "../../../constants/authorities"
+import { roleToString } from "../../../constants/authorities";
 
 const inner = {
-  width: "auto"
-}
+  width: "auto",
+};
 
 const container = {
   // marginTop: 100,
@@ -20,8 +20,6 @@ const container = {
 
 const info = {
   textAlign: "left",
-  // marginLeft: 350,
-  // marginTop: 50,
 };
 
 const userButton = {
@@ -45,10 +43,6 @@ const ManageUser = (props) => {
 
   useEffect(() => dispatch(getUser(id)), [id, dispatch]);
 
-  // if (!currentUser) {
-  //   return <Redirect to="/login" />;
-  // }
-
   if (isLoading) return <div>Loading</div>;
 
   const formatRegistration = moment(user.registrationDate).format(
@@ -58,11 +52,12 @@ const ManageUser = (props) => {
     "MMMM Do YYYY, h:mm:ss a"
   );
 
-  const handleOnChangeRole = (role) => {
+  const handleOnChangeRole = async (role) => {
     console.log(user.id, role);
     console.log(user);
     const { id } = user;
-    AdminService.setRole(id, role);
+    await AdminService.setRole(id, role);
+    dispatch(getUser(id), [id, dispatch]);
   };
 
   const handleDeleteOnClick = (id) => {
@@ -77,37 +72,45 @@ const ManageUser = (props) => {
           <h3>{`Authorities: ${roleToString(user.role)}`}</h3>
           <div className="info" style={info}>
             <p>
-              <strong>{`Id: ${user.id}`}</strong> {}
+              <strong>{`Id: `}</strong> {user.id}
             </p>
             <p>
-              <strong>{`Email: ${user.email}`}</strong> {}
+              <strong>{`Email: `}</strong> {user.email}
+            </p>
+            {user.firstName && (
+              <p>
+                <strong>{`First name:`}</strong> {user.firstName}
+              </p>
+            )}
+            {user.lastName && (
+              <p>
+                <strong>{`Last name: `}</strong> {user.lastName}
+              </p>
+            )}
+            {user.login && (
+              <p>
+                <strong>{`Login: `}</strong> {user.login}
+              </p>
+            )}
+            <p>
+              <strong>{`Registration date: `}</strong> {formatRegistration}
             </p>
             <p>
-              <strong>{`First name: ${user.firstName}`}</strong> {}
+              <strong>{`Last visited: `}</strong> {formatLastVisited}
+            </p>
+            {user.location && (
+              <p>
+                <strong>{`Location: `}</strong> {user.location}
+              </p>
+            )}
+            <p>
+              <strong>{`Article count: `}</strong> {user.articleCount}
             </p>
             <p>
-              <strong>{`Last name: ${user.lastName}`}</strong> {}
+              <strong>{`Messages count: `}</strong> {user.messagesCount}
             </p>
             <p>
-              <strong>{`Login: ${user.login}`}</strong> {}
-            </p>
-            <p>
-              <strong>{`Registration date: ${formatRegistration}`}</strong> {}
-            </p>
-            <p>
-              <strong>{`Last visited: ${formatLastVisited}`}</strong> {}
-            </p>
-            <p>
-              <strong>{`Location: ${user.location}`}</strong> {}
-            </p>
-            <p>
-              <strong>{`Article count: ${user.articleCount}`}</strong> {}
-            </p>
-            <p>
-              <strong>{`Messages count: ${user.messagesCount}`}</strong> {}
-            </p>
-            <p>
-              <strong>{`Rank: ${user.rank}`}</strong> {}
+              <strong>{`Rank: `}</strong> {user.rank}
             </p>
             <div style={manageForm}>
               <Dropdown>
@@ -123,9 +126,7 @@ const ManageUser = (props) => {
                   >
                     User
                   </Dropdown.Item>
-                  <Dropdown.Item 
-                    as="button">Moderator
-                  </Dropdown.Item>
+                  <Dropdown.Item as="button">Moderator</Dropdown.Item>
                   <Dropdown.Item
                     as="button"
                     onClick={() => handleOnChangeRole(2)}
