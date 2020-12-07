@@ -51,13 +51,11 @@ const BoardAdmin = (props) => {
         headers: authHeader(),
         params,
       });
-      //data.data.role = authorities.roleStringToString(data.data.role);
       console.log(data.data);
       setUsers(data.data);
       setLoading(false);
     } catch (e) {
       setLoading(false);
-      // console.log(e);
     }
   }, []);
 
@@ -72,7 +70,6 @@ const BoardAdmin = (props) => {
   }, []);
 
   const handleActionsOnClick = (id) => {
-    // console.log(id);
     props.history.push(`/manageuser/${id}`);
   };
 

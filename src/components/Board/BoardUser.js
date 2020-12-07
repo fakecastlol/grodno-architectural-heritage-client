@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from "react";
 
-import UserService from "../../services/user.service";
-
 const BoardUser = () => {
   const [content, setContent] = useState("");
 
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   const containerStyle = {
     marginTop: 100,
-    color: 'black'
-  }
+    color: "black",
+  };
 
   return (
     <div className="container" style={containerStyle}>
-        <h3>User page</h3>
+      <h3>User page</h3>
     </div>
   );
 };

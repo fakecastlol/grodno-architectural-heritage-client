@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import UserService from "../services/user.service";
-
+import { UserService } from "../services";
 const h1 = {
   marginTop: "500",
   color: "black",

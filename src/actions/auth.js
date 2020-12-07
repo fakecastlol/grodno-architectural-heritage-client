@@ -7,11 +7,10 @@ import {
   SET_MESSAGE,
 } from "../constants/action.types";
 
-import AuthService from "../services/auth.service";
+import {AuthService} from "../services";
 
 export const register = (email, password) => (dispatch) => {
-  return AuthService.register(email, password)
-  .then(
+  return AuthService.register(email, password).then(
     (response) => {
       console.log(response);
       dispatch({
