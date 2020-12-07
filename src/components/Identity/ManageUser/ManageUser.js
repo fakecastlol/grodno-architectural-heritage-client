@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useParams } from "react-router-dom";
 import moment from "moment";
 import { getUser } from "../../../actions/manageUser";
-import AdminService from "../../../services/admin.service";
+import { AdminService } from "../../../services";
+import { ProfileService } from "../../../services";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 import Form from "react-validation/build/form";
@@ -34,14 +35,29 @@ const manageForm = {
   width: "100%",
 };
 
+const img = {
+  textAlign: "center",
+};
+
 const ManageUser = (props) => {
   const { id } = useParams();
 
   const dispatch = useDispatch();
 
   const { user, isLoading } = useSelector((state) => state.manageUser);
+  const [image, setImage] = useState("");
 
   useEffect(() => dispatch(getUser(id)), [id, dispatch]);
+
+  useEffect(() => {
+    if (id) {
+      ProfileService.getProfileImage(id)
+        .then((resp) => {
+          setImage(resp.data || "");
+        })
+        .catch(() => setImage(""));
+    }
+  }, [id]);
 
   if (isLoading) return <div>Loading</div>;
 
@@ -62,6 +78,7 @@ const ManageUser = (props) => {
 
   const handleDeleteOnClick = (id) => {
     AdminService.deleteUser(id);
+    // await AdminService.getUsers();
     props.history.push("/admin");
   };
 
@@ -71,6 +88,9 @@ const ManageUser = (props) => {
         <div className="container" style={container}>
           <h3>{`Authorities: ${roleToString(user.role)}`}</h3>
           <div className="info" style={info}>
+            <div class="container" style={img}>
+              {image && <img src={image} height={100} width={100} />}
+            </div>
             <p>
               <strong>{`Id: `}</strong> {user.id}
             </p>
