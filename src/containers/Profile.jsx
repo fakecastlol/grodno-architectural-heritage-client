@@ -5,15 +5,14 @@ import { Redirect } from "react-router-dom";
 import moment from "moment";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
-import ProfileService from "../services/profile.service";
-import AdminService from "../services/admin.service";
+import { ProfileService, AdminService } from "../services";
 import "../index.css";
 import "./profile.css";
 import ImageField from "../components/ImageField";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
-import Image from "react-bootstrap/Image";
+import Image, { propTypes } from "react-bootstrap/Image";
 import ImageUploader from "react-images-upload";
 import { updateProfile } from "../actions/profile";
 import API_URL from "../constants/api.url";
@@ -28,7 +27,7 @@ const container = {
 const info = {
   textAlign: "left",
   // marginLeft: 350,
-  marginTop: 20,
+  // marginTop: 20,
 };
 
 const formStyle = {
@@ -67,6 +66,12 @@ const Profile = () => {
 
   const [formData, setFormData] = useState({});
 
+  const [image, setImage] = useState(null);
+
+  useEffect(() => {
+    handleGetImage();
+  }, [currentUser]);
+
   useEffect(() => {
     if (!isLoading) {
       setFormData({
@@ -94,6 +99,7 @@ const Profile = () => {
   const handleSwitchViewProfile = async () => {
     setIsSwitchOn(!isSwitchOn);
     await dispatch(getUser(currentUser.user.id));
+    await handleGetImage();
   };
 
   const handleApplyChanges = (e) => {
@@ -128,6 +134,12 @@ const Profile = () => {
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const handleGetImage = () => {
+    ProfileService.getProfileImage(currentUser.user.id).then((resp) => {
+      setImage(resp.data);
+    });
   };
 
   const onChangeImage = (picture) => {
@@ -257,6 +269,9 @@ const Profile = () => {
               </div>
             ) : (
               <>
+                <div class="container img">
+                  {image && <img src={image} height={100} width={100} />}
+                </div>
                 <p>
                   <strong>Email:</strong> {userField.email}
                 </p>
