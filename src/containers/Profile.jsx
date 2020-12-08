@@ -137,9 +137,11 @@ const Profile = () => {
   };
 
   const handleGetImage = () => {
-    ProfileService.getProfileImage(currentUser.user.id).then((resp) => {
-      setImage(resp.data);
-    });
+    ProfileService.getProfileImage(currentUser.user.id)
+      .then((resp) => {
+        setImage(resp.data || "");
+      })
+      .catch(() => setImage(""));
   };
 
   const onChangeImage = (picture) => {
@@ -171,13 +173,14 @@ const Profile = () => {
                 </button>
 
                 <ImageUploader
-                  withIcon={false}
+                  withIcon={true}
                   buttonText="Choose images"
                   onChange={onChangeImage}
                   imgExtension={[".jpg", ".gif", ".png", ".gif"]}
                   maxFileSize={5242880}
                   withPreview
                   fileSizeError=" file size is too big"
+                  singleImage={true}
                 />
 
                 <div className="fields">
