@@ -14,6 +14,7 @@ import BoardModerator from "./components/Board/BoardModerator";
 import BoardAdmin from "./components/Board/BoardAdmin";
 import ManageUser from "./components/Identity/ManageUser/ManageUser";
 import NotFound from "./components/NotFound";
+import Map from "./containers/Map/Map.jsx";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/mod" component={BoardModerator} />
           <Route path="/admin" component={BoardAdmin} />
           <Route path="/manageuser/:id" component={ManageUser} />
+          <Route path="/map" component={Map} />
           <Route component={NotFound} />
         </Switch>
       </div>
