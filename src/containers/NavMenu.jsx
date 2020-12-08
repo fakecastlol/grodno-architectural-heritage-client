@@ -46,6 +46,12 @@ const NavMenu = () => {
           </li>
 
           <li className="nav-item">
+            <Link to={"/map"} className="nav-link">
+              Map
+            </Link>
+          </li>
+
+          <li className="nav-item">
             <Link to={"/about"} className="nav-link">
               About
             </Link>
