@@ -1,0 +1,32 @@
+.map-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.menu {
+  margin-top: 70px;
+  background: a(0.8);
+  position: absolute;
+  /* display: flex; */
+  justify-content: "center";
+  color: aliceblue;
+  text-align: center;
+  /* opacity: 0.6; */
+}
+
+.Btn-Blue-BG.active {
+  background-color: #454a50 !important;
+}
+
+
+.geocoder {
+    display: table-cell;
+    background-color: forestgreen;
+    justify-content: center;
+    position: absolute;
+    margin-top: 200px;
+    margin-left: 200px;
+}
