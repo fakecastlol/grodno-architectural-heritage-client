@@ -107,51 +107,50 @@ const BoardAdmin = (props) => {
   ];
 
   return (
-    <div className="outer">
-      <div className="inner" style={inner}>
-        {/* <div className="container">  */}
-
-        <PaginationProvider
-          pagination={paginationFactory({
-            custom: true,
-            page,
-            sizePerPage: setPageSize,
-            totalSize: users.count,
-          })}
-        >
-          {({ paginationProps, paginationTableProps }) => (
-            <div className="container">
-              {
-                loading ? (
-                  <ReactBootStrap.Spinner animation="border" />
-                ) : (
-                  // <div >
-                  <div class="row" className="hdr">
-                    <div class="col-sm-12 btn btn-info" style={tableHeader1}>
-                      {`LIST OF USERS`}
-                    </div>
-                    <BootstrapTable
-                      bordered
-                      hover
-                      remote
-                      keyField="id"
-                      data={users.itemList ?? []}
-                      columns={columns}
-                      onTableChange={handleTableChange}
-                      {...paginationTableProps}
-                      // filterFactory={filterFactory()}
-                    />
+    // <div className="outer">
+    //   <div className="inner" style={inner}>
+    <div className="container">
+      <PaginationProvider
+        pagination={paginationFactory({
+          custom: true,
+          page,
+          sizePerPage: setPageSize,
+          totalSize: users.count,
+        })}
+      >
+        {({ paginationProps, paginationTableProps }) => (
+          <div className="container">
+            {
+              loading ? (
+                <ReactBootStrap.Spinner animation="border" />
+              ) : (
+                // <div >
+                <div class="row" className="hdr">
+                  <div class="col-sm-12 btn btn-info" style={tableHeader1}>
+                    {`LIST OF USERS`}
                   </div>
-                )
-                // </div>
-              }
-              <PaginationListStandalone {...paginationProps} />
-            </div>
-          )}
-        </PaginationProvider>
-        {/* //   </div> */}
-      </div>
+                  <BootstrapTable
+                    bordered
+                    hover
+                    remote
+                    keyField="id"
+                    data={users.itemList ?? []}
+                    columns={columns}
+                    onTableChange={handleTableChange}
+                    {...paginationTableProps}
+                    // filterFactory={filterFactory()}
+                  />
+                </div>
+              )
+              // </div>
+            }
+            <PaginationListStandalone {...paginationProps} />
+          </div>
+        )}
+      </PaginationProvider>
+      {/* //   </div> */}
     </div>
+    // </div>
   );
 };
 
