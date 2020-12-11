@@ -1,6 +1,10 @@
 import React from "react";
 
-const Tooltip = ({ feature }) => {
+const Tooltip = ({
+  feature,
+  coordinates,
+  // address
+}) => {
   const { id } = feature.properties;
 
   return (
@@ -8,6 +12,12 @@ const Tooltip = ({ feature }) => {
       <strong>Source Layer:</strong> {feature.layer["source-layer"]}
       <br />
       <strong>Layer ID:</strong> {feature.layer.id}
+      <br />
+      <strong>Type:</strong> {feature.layer.type}
+      <br />
+      <strong>Coordinates:</strong> {coordinates}
+      {/* <br />
+      <strong>Adress:</strong> {address} */}
     </div>
   );
 };

@@ -40,7 +40,7 @@ const NotFound = () => {
     <div className="outer">
       <h1 style={s404}>404</h1>
       <Link class="text-dark" to="/" style={h1}>
-        <h1>Not Found! Go Home</h1>
+        <h1>Not Found!</h1>
       </Link>
     </div>
   );

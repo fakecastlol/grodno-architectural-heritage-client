@@ -5,8 +5,7 @@ import Tooltip from "./Tooltip";
 import ReactDOM from "react-dom";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
-import { Token } from "../../constants/mapbox";
-import { MapLayer } from "../../constants/mapbox";
+import { Token, MapLayer, EntryPoint } from "../../constants/mapbox";
 import Geocoder from "react-mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
@@ -56,7 +55,7 @@ const Map = () => {
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: layers[layer],
-      center: [23.829529, 53.677834],
+      center: EntryPoint,
       zoom: 16.5,
       antialias: true,
       pitch: 45,
@@ -69,6 +68,8 @@ const Map = () => {
     //     mapboxgl: mapboxgl,
     //   })
     // );
+
+    // document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
 
     // change cursor to pointer when user hovers over a clickable feature
     map.on("mouseenter", (e) => {
@@ -87,11 +88,24 @@ const Map = () => {
       const features = map.queryRenderedFeatures(e.point);
       if (features.length) {
         const feature = features[0];
-
+        const coordinates = e.lngLat.toString();
+        // e.features[0].geometry.coordinates.slice();
+        // const address = e.address.toString();
+        // const addr = map.address;
         // Create tooltip node
+        // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        // }
+        // map.setLngLat(coordinates);
         const tooltipNode = document.createElement("div");
-        ReactDOM.render(<Tooltip feature={feature} />, tooltipNode);
-
+        ReactDOM.render(
+          <Tooltip
+            feature={feature}
+            coordinates={coordinates}
+            // address={address}
+          />,
+          tooltipNode
+        );
         // Set tooltip on map
         tooltipRef.current
           .setLngLat(e.lngLat)

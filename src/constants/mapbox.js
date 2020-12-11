@@ -3,3 +3,4 @@ export const Token =
 
 export const MapLayer = "mapbox://styles/mapbox/";
 
+export const EntryPoint = [23.829529, 53.677834];

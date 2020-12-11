@@ -167,7 +167,7 @@ const Profile = () => {
                   type="submit"
                   class="btn btn-secondary upload-file"
                   style={applyStyle}
-                  // onClick={handleUploadImage}
+                  onClick={onChangeImage}
                 >
                   {`Upload file`}
                 </button>
@@ -175,10 +175,10 @@ const Profile = () => {
                 <ImageUploader
                   withIcon={true}
                   buttonText="Choose images"
-                  onChange={onChangeImage}
+                  // onChange={onChangeImage}
                   imgExtension={[".jpg", ".gif", ".png", ".gif"]}
                   maxFileSize={5242880}
-                  withPreview
+                  withPreview={true}
                   fileSizeError=" file size is too big"
                   singleImage={true}
                 />

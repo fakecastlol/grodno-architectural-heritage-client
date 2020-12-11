@@ -21,12 +21,17 @@
   background-color: #454a50 !important;
 }
 
-
 .geocoder {
-    display: table-cell;
-    background-color: forestgreen;
-    justify-content: center;
-    position: absolute;
-    margin-top: 200px;
-    margin-left: 200px;
+  display: table-cell;
+  background-color: forestgreen;
+  justify-content: center;
+  position: absolute;
+  margin-top: 200px;
+  margin-left: 200px;
+}
+
+.mapboxgl-popup {
+  /* max-width: unset !important;
+  width: auto !important; */
+  word-break: break-word;
 }
