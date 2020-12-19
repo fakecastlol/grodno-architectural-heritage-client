@@ -1,0 +1,16 @@
+.btn-add {
+  float: right;
+  margin-right: 10px;
+}
+
+.fields {
+  margin-top: 1em;
+}
+
+.form-group.preview {
+  text-align: center;
+}
+
+.dropBtn {
+  width: 100%;
+}
