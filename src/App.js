@@ -8,13 +8,16 @@ import Register from "./containers/Register";
 import About from "./components/About";
 import NavMenu from "./containers/NavMenu";
 import Home from "./components/Home/Home";
-import Profile from "./containers/Profile";
+import Profile from "./containers/Profile/Profile";
 import BoardUser from "./components/Board/BoardUser";
 import BoardModerator from "./components/Board/BoardModerator";
 import BoardAdmin from "./components/Board/BoardAdmin";
 import ManageUser from "./components/Identity/ManageUser/ManageUser";
 import NotFound from "./components/NotFound";
 import Map from "./containers/Map/Map.jsx";
+import Construction from "./containers/Construction/Construction";
+import ManageConstruction from "./containers/Construction/ManageConstruction.jsx";
+import AddConstruction from "./containers/Construction/AddConstruction";
 
 function App() {
   return (
@@ -32,6 +35,9 @@ function App() {
           <Route path="/admin" component={BoardAdmin} />
           <Route path="/manageuser/:id" component={ManageUser} />
           <Route path="/map" component={Map} />
+          <Route path="/construction" component={Construction} />
+          <Route path="/manageconstruction" component={ManageConstruction} />
+          <Route path="/addconstruction" component={AddConstruction} />
           <Route component={NotFound} />
         </Switch>
       </div>
