@@ -33,6 +33,12 @@ export const typeToString = (type) => {
     case 1:
       return "Sacral";
 
+    case 2:
+      return "Castle";
+
+    case 3:
+      return "Attraction";
+
     default:
       return "";
   }
