@@ -35,3 +35,75 @@
   width: auto !important; */
   word-break: break-word;
 }
+
+/* 
+.dot {
+  height: 25px;
+  width: 25px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+*/
+.marker {
+  /* background-image: url("file:///C:/Users/Uladzimir.Babko/AppData/Local/Temp/Temp1_mapbox-maki-6.2.0-2-g7d8563e.zip/mapbox-maki-7d8563e/icons/beach-15.svg"); */
+  /*background-size: cover; */
+  /* marker-symbol:"star"  */
+  /* width: 40px;
+  height: 40px; */
+  /* border-radius: 50%; */
+  /* cursor: pointer; */
+  /* background-color: red;  */
+  will-change: transform;
+}
+
+.mapboxgl-popup {
+  /* transform: none !important;
+  top: 15%;
+  right: 10px; */
+}
+
+.construction-popup.mapboxgl-popup-anchor-top-right.mapboxgl-popup-tip {
+  /* transform:none !important;
+     top: 15%;
+    left: 10px; */
+  /* display:none !important; */
+}
+
+.marker {
+  background-size: cover;
+  background-color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.sacral {
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/f/f6/Japanese_Map_symbol_%28Church%29.svg");
+}
+
+.castle {
+  background-image: url("https://static.thenounproject.com/png/234500-200.png");
+}
+
+.attraction {
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Unesco_Cultural_Heritage_logo.svg/1024px-Unesco_Cultural_Heritage_logo.svg.png");
+}
+
+.header-name {
+  font-size: large;
+}
+
+/* .sidebar-style {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 12px;
+  background-color: #404040;
+  color: #ffffff;
+  z-index: 1 !important;
+  padding: 6px;
+  font-weight: bold;
+} */

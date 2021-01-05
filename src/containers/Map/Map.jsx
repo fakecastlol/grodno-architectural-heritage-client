@@ -1,17 +1,43 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import mapboxgl from "mapbox-gl";
+
 import "./Map.css";
 import Tooltip from "./Tooltip";
 import ReactDOM from "react-dom";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
-import { Token, MapLayer, EntryPoint } from "../../constants/mapbox";
+import { Token, MapLayer, EntryPoint, Bounds, getConstructionType } from "../../constants/mapbox";
 import Geocoder from "react-mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+//import construction from "../../reducers/construction";
+import { getConstructions } from "../../actions/construction";
+import construction from "../../reducers/construction";
+import Construction from "../Construction/Construction";
+
+const Marker = {
+  backgroundColor: "red",
+};
 
 mapboxgl.accessToken = Token;
 
 const Map = () => {
+  const dispatch = useDispatch();
+  const [markerImage, setMarkerPopup] = useState(null);
+  // constructions: constructionField,
+  // constructions,
+  // isLoading
+  const objects = useSelector((state) => {
+    console.log("checkstate", state);
+    return state.construction.constructions;
+  });
+  console.log("constructionsss", objects);
+
+  useEffect(() => {
+    dispatch(getConstructions());
+    // console.log("constructionsss", kek);
+  }, []);
+
   const mapContainerRef = useRef(null);
   const tooltipRef = useRef(new mapboxgl.Popup({ offset: 15 }));
   //   const [viewport, setViewport] = useState("");
@@ -22,14 +48,6 @@ const Map = () => {
     longitude: -122.4376,
     zoom: 8,
   });
-
-  const layers = {
-    1: MapLayer + "streets-v10",
-    2: MapLayer + "light-v10",
-    3: MapLayer + "dark-v9",
-    4: MapLayer + "outdoors-v9",
-    5: MapLayer + "satellite-v9",
-  };
 
   const handleSwitchLayer = (value) => {
     setLayer(value);
@@ -52,6 +70,24 @@ const Map = () => {
 
   // Initialize map when component mounts
   useEffect(() => {
+    // var northWest = mapboxgl.Map.latLng(23.649946, 53.777896),
+    //   southWest = mapboxgl.Map.latLng(23.701109, 53.585526),
+    //   southEast = mapboxgl.Map.latLng(23.937955, 53.569966),
+    //   northEast = mapboxgl.Map.latLng(24.012956, 53.791696),
+    //   bounds = mapboxgl.Map.latLngBounds(
+    //     northWest,
+    //     southWest,
+    //     southEast,
+    //     northEast
+    //   );
+    const layers = {
+      1: MapLayer + "streets-v10",
+      2: MapLayer + "light-v10",
+      3: MapLayer + "dark-v9",
+      4: MapLayer + "outdoors-v9",
+      5: MapLayer + "satellite-v9",
+    };
+
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: layers[layer],
@@ -60,6 +96,8 @@ const Map = () => {
       antialias: true,
       pitch: 45,
       bearing: -17.6,
+      minZoom: 11,
+      maxBounds: Bounds,
     });
 
     // map.addControl(
@@ -97,6 +135,7 @@ const Map = () => {
         //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         // }
         // map.setLngLat(coordinates);
+
         const tooltipNode = document.createElement("div");
         ReactDOM.render(
           <Tooltip
@@ -127,6 +166,53 @@ const Map = () => {
           break;
         }
       }
+
+      if (objects !== undefined) {
+        objects.forEach((construction) => {
+          console.log(construction.longitude, construction.latitude);
+
+          const popup = new mapboxgl.Popup({ offset: 25 });
+          popup.setHTML(
+            `<strong class="header-name">${construction.name}</strong>
+              <br><strong> Location: </strong> ${construction.longitude}, ${construction.latitude}
+              <br><strong> Address: </strong> ${construction.address}
+              <br><strong> Article: </strong> <a href=${construction.article} target="_blank">link</a>
+              <br>${construction.description}`
+          );
+
+          var el = document.createElement("div");
+          el.className = "marker " + getConstructionType(construction.type);
+
+          new mapboxgl.Marker(
+            el,
+            {
+              color: "#FFFFFF",
+              draggable: false,
+              // "marker-symbol":"star"
+              // style: Marker
+              // className: "dot",
+            }
+          )
+            .setLngLat([construction.longitude, construction.latitude])
+            .setPopup(popup)
+            .addTo(map);
+        });
+      }
+
+      // new mapboxgl.Marker({
+      //   color: "#FFFFFF",
+      //   draggable: true,
+      // })
+      //   .setLngLat([23.829529, 53.677834])
+      //   .addTo(map);
+
+      // new mapboxgl.Marker({
+      //   color: "#FFFFFF",
+      //   draggable: true,
+      // })
+      //   .setLngLat([23.839529, 53.667834])
+      //   .addTo(map);
+
       map.addLayer(
         {
           id: "3d-buildings",
@@ -167,13 +253,13 @@ const Map = () => {
 
     // Clean up on unmount
     return () => map.remove();
-  }, [layer]);
+  }, [layer, objects]);
 
   return (
     <div>
       <div className="map-container" ref={mapContainerRef} />
 
-      <Geocoder
+      {/* <Geocoder
         className="geocoder"
         onViewportChange={handleViewportChange}
         mapboxApiAccessToken={Token}
@@ -182,7 +268,7 @@ const Map = () => {
         hideOnSelect={true}
         value=""
         // queryParams={params}
-      />
+      /> */}
 
       <ButtonGroup type="checkbox" aria-label="Basic example" className="menu">
         <Button
