@@ -76,8 +76,8 @@ const ManageUser = (props) => {
     dispatch(getUser(id), [id, dispatch]);
   };
 
-  const handleDeleteOnClick = (id) => {
-    AdminService.deleteUser(id);
+  const handleDeleteOnClick = async (id) => {
+    await AdminService.deleteUser(id);
     // await AdminService.getUsers();
     props.history.push("/admin");
   };
@@ -91,9 +91,6 @@ const ManageUser = (props) => {
             <div class="container" style={img}>
               {image && <img src={image} height={100} width={100} />}
             </div>
-            <p>
-              <strong>{`Id: `}</strong> {user.id}
-            </p>
             <p>
               <strong>{`Email: `}</strong> {user.email}
             </p>
