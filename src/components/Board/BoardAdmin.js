@@ -83,7 +83,7 @@ const BoardAdmin = (props) => {
         return roleToString(role);
       },
     },
-    { dataField: "id", text: "Id" },
+    // { dataField: "id", text: "Id" },
     { dataField: "login", text: "Login", sort: true },
     {
       btn: "id",
@@ -126,8 +126,11 @@ const BoardAdmin = (props) => {
               ) : (
                 // <div >
                 <div class="row" className="hdr">
-                  <div class="col-sm-12 btn btn-info" style={tableHeader1}>
+                  {/* <div class="col-sm-12 btn btn-info" style={tableHeader1}>
                     {`LIST OF USERS`}
+                  </div> */}
+                  <div className="tHeader">
+                    <h3>List of users</h3>
                   </div>
                   <BootstrapTable
                     bordered
