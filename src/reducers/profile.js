@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 
 import { UPDATE_USER_PROFILE } from "../constants/action.types";
 
