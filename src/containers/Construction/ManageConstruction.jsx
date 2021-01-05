@@ -11,7 +11,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import Construction from "./Construction";
 // import { roleToString } from "../../../constants/authorities";
-import { required } from "./Validation";
+import { required } from "../../helpers/validation";
 import CheckButton from "react-validation/build/button";
 import "../../index.css";
 import {
@@ -69,11 +69,15 @@ const ManageConstruction = (props) => {
   const form = useRef();
   const checkBtn = useRef();
   const [message, setMessage] = useState("");
-  
+
   const { construction: constructionField, isLoading } = useSelector(
     (state) => state.construction
   );
 
+  const [type, setType] = useState("Type");
+  const [status, setStatus] = useState("Status");
+  const [material, setMaterial] = useState("Material");
+  const [archTitle, setArchTitle] = useState("Architectural style");
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
@@ -83,13 +87,17 @@ const ManageConstruction = (props) => {
         name: constructionField.name,
         address: constructionField.address,
         article: constructionField.article,
-        location: constructionField.location,
+        location:
+          constructionField.longitude + ", " + constructionField.latitude,
         buildDate: constructionField.buildDate,
         lossDate: constructionField.lossDate,
         type: constructionField.type,
         status: constructionField.status,
         material: constructionField.material,
         architecturalStyle: constructionField.architecturalStyle,
+        latitude: constructionField.latitude,
+        longitude: constructionField.longitude,
+        description: constructionField.description,
       });
     }
   }, [isLoading, setFormData, constructionField]);
@@ -128,6 +136,42 @@ const ManageConstruction = (props) => {
 
   const handleBackOnClick = () => {
     props.history.push("/construction");
+  };
+
+  const onSetType = async (e, value, title) => {
+    e.preventDefault();
+    setType("Type: " + title);
+    setFormData((construction) => ({
+      ...construction,
+      ["type"]: value,
+    }));
+  };
+
+  const onSetStatus = async (e, value, title) => {
+    e.preventDefault();
+    setStatus("Status: " + title);
+    setFormData((construction) => ({
+      ...construction,
+      ["status"]: value,
+    }));
+  };
+
+  const onSetMaterial = async (e, value, title) => {
+    e.preventDefault();
+    setMaterial("Material: " + title);
+    setFormData((construction) => ({
+      ...construction,
+      ["material"]: value,
+    }));
+  };
+
+  const onSetStyle = async (e, value, title) => {
+    e.preventDefault();
+    setArchTitle("Style: " + title);
+    setFormData((construction) => ({
+      ...construction,
+      ["architecturalStyle"]: value,
+    }));
   };
 
   useEffect(() => dispatch(getConstruction(location.state.id)), [
@@ -173,7 +217,7 @@ const ManageConstruction = (props) => {
                         type="text"
                         className="form-control"
                         name="text"
-                        value={constructionField.name}
+                        value={formData.name}
                         style={formStyle}
                         validations={[required]}
                         onChange={(e) => onChangeFormData(e, "name")}
@@ -198,7 +242,7 @@ const ManageConstruction = (props) => {
                         type="text"
                         className="form-control"
                         name="text"
-                        value={constructionField.address}
+                        value={formData.address}
                         style={formStyle}
                         onChange={(e) => onChangeFormData(e, "address")}
                       />
@@ -215,7 +259,7 @@ const ManageConstruction = (props) => {
                         type="text"
                         className="form-control"
                         name="text"
-                        value={constructionField.coordinates}
+                        value={formData.location}
                         style={formStyle}
                         onChange={(e) => onChangeFormData(e, "location")}
                       />
@@ -232,7 +276,7 @@ const ManageConstruction = (props) => {
                         type="text"
                         className="form-control"
                         name="text"
-                        value={constructionField.article}
+                        value={formData.article}
                         style={formStyle}
                         onChange={(e) => onChangeFormData(e, "article")}
                       />
@@ -250,6 +294,7 @@ const ManageConstruction = (props) => {
                         className="form-control"
                         name="text"
                         style={formStyle}
+                        value={formData.buildDate}
                         onChange={(e) => onChangeFormData(e, "buildDate")}
                       />
                     </div>
@@ -265,13 +310,132 @@ const ManageConstruction = (props) => {
                         className="form-control"
                         name="text"
                         style={formStyle}
+                        value={formData.lossDate}
                         onChange={(e) => onChangeFormData(e, "lossDate")}
                       />
                     </div>
                   </div>
+
+                  <Dropdown>
+                    <DropdownButton
+                      variant="secondary"
+                      id="dropdown-basic"
+                      title={typeToString(formData.type)}
+                      className="drop-btn"
+                    >
+                      <Dropdown.Item
+                        as="button"
+                        onClick={(e) => onSetType(e, 1, "sacral")}
+                      >
+                        Sacral
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        as="button"
+                        onClick={(e) => onSetType(e, 2, "castle")}
+                      >
+                        Castle
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        as="button"
+                        onClick={(e) => onSetType(e, 3, "attraction")}
+                      >
+                        Attraction
+                      </Dropdown.Item>
+                    </DropdownButton>
+                  </Dropdown>
+                  {/* </td>
+                    <td> */}
+                  <Dropdown>
+                    <DropdownButton
+                      variant="secondary"
+                      id="dropdown-basic"
+                      title={statusToString(formData.status)}
+                      className="drop-btn"
+                    >
+                      <Dropdown.Item
+                        as="button"
+                        onClick={(e) => onSetStatus(e, 1, "active")}
+                      >
+                        Active
+                      </Dropdown.Item>
+                    </DropdownButton>
+                  </Dropdown>
+                  {/* </td>
+                  </tr>
+                  <tr>
+                    <td> */}
+                  <Dropdown>
+                    <DropdownButton
+                      variant="secondary"
+                      id="dropdown-basic"
+                      title={materialToString(formData.material)}
+                      className="drop-btn"
+                    >
+                      <Dropdown.Item
+                        as="button"
+                        onClick={(e) => onSetMaterial(e, 1, "wood")}
+                      >
+                        Wood
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        as="button"
+                        onClick={(e) => onSetMaterial(e, 1, "brick")}
+                      >
+                        Brick
+                      </Dropdown.Item>
+                    </DropdownButton>
+                  </Dropdown>
+                  {/* </td>
+                    <td> */}
+                  <Dropdown>
+                    <DropdownButton
+                      variant="secondary"
+                      id="dropdown-basic"
+                      title={styleToString(formData.archTitle)}
+                      className="drop-btn"
+                    >
+                      <Dropdown.Item
+                        // as="button"
+                        onClick={(e) => onSetStyle(e, 1, "baroque")}
+                      >
+                        Baroque
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        // as="button"
+                        onClick={(e) => onSetStyle(e, 2, "eclecticism")}
+                      >
+                        Eclecticism
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        // as="button"
+                        onClick={(e) => onSetStyle(e, 3, "moorish")}
+                      >
+                        Moorish
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        // as="button"
+                        onClick={(e) => onSetStyle(e, 4, "gothic revival")}
+                      >
+                        Gothic Revival
+                      </Dropdown.Item>
+                    </DropdownButton>
+                  </Dropdown>
+
+                  <div>
+                    <strong>Description:</strong>
+                    <div class="form-group form-info">
+                      <textarea
+                        class="form-control"
+                        id="exampleFormControlTextarea1"
+                        rows="3"
+                        value={formData.description}
+                        onChange={(e) => onChangeFormData(e, "description")}
+                      ></textarea>
+                    </div>
+                  </div>
                 </div>
               ) : (
-                <div>
+                <div className="form-info">
                   {constructionField.type && (
                     <p>
                       <strong>{`Type:`}</strong>{" "}
@@ -311,7 +475,10 @@ const ManageConstruction = (props) => {
                   {/* {construction.location && ( */}
                   {constructionField.article && (
                     <p>
-                      <strong>{`Article: `}</strong> {constructionField.article}
+                      <strong>{`Article: `}</strong>{" "}
+                      <a href={constructionField.article} target="_blank">
+                        link
+                      </a>
                     </p>
                   )}
                   {constructionField.architecturalStyle && (
@@ -320,15 +487,22 @@ const ManageConstruction = (props) => {
                       {styleToString(constructionField.architecturalStyle)}
                     </p>
                   )}
-                  {constructionField.location && (
+                  {constructionField.latitude && (
                     <p>
                       <strong>{`Location: `}</strong>{" "}
-                      {constructionField.location}
+                      {constructionField.latitude},{" "}
+                      {constructionField.longitude}
                     </p>
                   )}
                   {constructionField.address && (
                     <p>
                       <strong>{`Address: `}</strong> {constructionField.address}
+                    </p>
+                  )}
+                  {constructionField.description && (
+                    <p>
+                      <strong>{`Description: `}</strong>{" "}
+                      {constructionField.description}
                     </p>
                   )}
                 </div>

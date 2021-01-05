@@ -10,7 +10,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 // import { ConstructionService } from "../../services/";
-import { required } from "./Validation";
+import { required, validCoordinates } from "../../helpers/validation";
 import CheckButton from "react-validation/build/button";
 
 const container = {
@@ -50,15 +50,23 @@ const buttons = {
   justifyContent: "space-between",
 };
 
+const textStyle = {
+  height: "80px",
+  width: "100%",
+};
+
 const AddConstruction = (props) => {
   const form = useRef();
   const checkBtn = useRef();
   const [message, setMessage] = useState("");
+  const [successful, setSuccessful] = useState(false);
 
   const [type, setType] = useState("Type");
   const [status, setStatus] = useState("Status");
   const [material, setMaterial] = useState("Material");
   const [archTitle, setArchTitle] = useState("Architectural style");
+
+  const [validated, setValidated] = useState(false);
 
   // const onSetArch = (text) => {
   //   setArchTitle({text});
@@ -116,10 +124,36 @@ const AddConstruction = (props) => {
     }));
   };
 
-  const handleAddConstruction = async (e) => {
-    e.preventDefault();
-    await ConstructionService.createConstruction(formData);
-    props.history.push("/construction");
+  // const handleValidation = (event) => {
+  //   const form = event.currentTarget;
+  //   if (form.checkValidity() === false) {
+  //     event.preventDefault();
+  //     event.stopPropagation();
+  //   }
+
+  //   setValidated(true);
+  // };
+
+  const handleAddConstruction = async (event) => {
+    event.preventDefault();
+    setSuccessful(false);
+    form.current.validateAll();
+
+    // const form = event.currentTarget;
+    // if (form.checkValidity() === false)
+    if (checkBtn.current.context._errors.length === 0) {
+      // event.preventDefault();
+      // event.stopPropagation();
+      setSuccessful(true);
+      await ConstructionService.createConstruction(formData);
+      props.history.push("/construction");
+    }
+    // setValidated(true);
+    else {
+      setSuccessful(false);
+    }
+    // await ConstructionService.createConstruction(formData);
+    // props.history.push("/construction");
   };
 
   return (
@@ -130,9 +164,11 @@ const AddConstruction = (props) => {
           ref={form}
         >
           <h3>Construction</h3>
-          <div className="info" style={info}>
+          {!successful && (
             <div>
-              {/* <ImageUploader
+              <div className="info" style={info}>
+                <div>
+                  {/* <ImageUploader
                 withIcon={true}
                 buttonText="Choose images"
                 onChange={onChangeImage}
@@ -143,227 +179,262 @@ const AddConstruction = (props) => {
                 singleImage={true}
               /> */}
 
-              <div className="fields">
-                <div style={pStyle}>
-                  <strong>Name:</strong>
-                  <div
-                    className="form-group"
-                    // style={formStyle}
-                  >
-                    <Input
-                      type="text"
-                      className="form-control"
-                      name="name"
-                      style={formStyle}
-                      validations={[required]}
-                      onChange={(e) => onChangeFormData(e, "name")}
-                    />
-                  </div>
-                </div>
+                  <div className="fields">
+                    <div style={pStyle}>
+                      <strong>Name:</strong>
+                      <div
+                        className="form-group"
+                        // style={formStyle}
+                      >
+                        <Input
+                          type="text"
+                          className="form-control"
+                          name="name"
+                          style={formStyle}
+                          validations={[required]}
+                          onChange={(e) => onChangeFormData(e, "name")}
+                        />
+                      </div>
+                    </div>
 
-                <div style={pStyle}>
-                  <strong>Address:</strong>
-                  <div
-                    className="form-group"
-                    // style={formStyle}
-                  >
-                    <Input
-                      type="text"
-                      className="form-control"
-                      name="text"
-                      style={formStyle}
-                      onChange={(e) => onChangeFormData(e, "address")}
-                    />
-                  </div>
-                </div>
+                    <div style={pStyle}>
+                      <strong>Address:</strong>
+                      <div
+                        className="form-group"
+                        // style={formStyle}
+                      >
+                        <Input
+                          type="text"
+                          className="form-control"
+                          name="text"
+                          style={formStyle}
+                          onChange={(e) => onChangeFormData(e, "address")}
+                        />
+                      </div>
+                    </div>
 
-                <div style={pStyle}>
-                  <strong>Location:</strong>
-                  <div
-                    className="form-group"
-                    // style={formStyle}
-                  >
-                    <Input
-                      type="text"
-                      className="form-control"
-                      name="text"
-                      style={formStyle}
-                      onChange={(e) => onChangeFormData(e, "location")}
-                    />
-                  </div>
-                </div>
+                    <div style={pStyle}>
+                      <strong>Location:</strong>
+                      <div
+                        className="form-group"
+                        // style={formStyle}
+                      >
+                        <Input
+                          type="text"
+                          className="form-control"
+                          name="text"
+                          style={formStyle}
+                          onChange={(e) => onChangeFormData(e, "location")}
+                          validations={[validCoordinates]}
+                        />
+                      </div>
+                    </div>
 
-                <div style={pStyle}>
-                  <strong>Article:</strong>
-                  <div
-                    className="form-group"
-                    // style={formStyle}
-                  >
-                    <Input
-                      type="text"
-                      className="form-control"
-                      name="text"
-                      style={formStyle}
-                      onChange={(e) => onChangeFormData(e, "article")}
-                    />
-                  </div>
-                </div>
+                    <div style={pStyle}>
+                      <strong>Article:</strong>
+                      <div
+                        className="form-group"
+                        // style={formStyle}
+                      >
+                        <Input
+                          type="text"
+                          className="form-control"
+                          name="text"
+                          style={formStyle}
+                          onChange={(e) => onChangeFormData(e, "article")}
+                        />
+                      </div>
+                    </div>
 
-                <div style={pStyle}>
-                  <strong>Build date:</strong>
-                  <div
-                    className="form-group"
-                    // style={formStyle}
-                  >
-                    <Input
-                      type="date"
-                      className="form-control"
-                      name="text"
-                      style={formStyle}
-                      onChange={(e) => onChangeFormData(e, "buildDate")}
-                    />
-                  </div>
-                </div>
+                    <div style={pStyle}>
+                      <strong>Build date:</strong>
+                      <div
+                        className="form-group"
+                        // style={formStyle}
+                      >
+                        <Input
+                          type="date"
+                          className="form-control"
+                          name="text"
+                          style={formStyle}
+                          onChange={(e) => onChangeFormData(e, "buildDate")}
+                        />
+                      </div>
+                    </div>
 
-                <div style={pStyle}>
-                  <strong>Lost date:</strong>
-                  <div
-                    className="form-group"
-                    // style={formStyle}
-                  >
-                    <Input
-                      type="date"
-                      className="form-control"
-                      name="text"
-                      style={formStyle}
-                      onChange={(e) => onChangeFormData(e, "lossDate")}
-                    />
-                  </div>
-                </div>
+                    <div style={pStyle}>
+                      <strong>Lost date:</strong>
+                      <div
+                        className="form-group"
+                        // style={formStyle}
+                      >
+                        <Input
+                          type="date"
+                          className="form-control"
+                          name="text"
+                          style={formStyle}
+                          onChange={(e) => onChangeFormData(e, "lossDate")}
+                        />
+                      </div>
+                    </div>
 
-                {/* <table>
+                    <div>
+                      <strong>Description:</strong>
+                      <div class="form-group">
+                        <textarea
+                          class="form-control"
+                          id="exampleFormControlTextarea1"
+                          rows="3"
+                          onChange={(e) => onChangeFormData(e, "description")}
+                        ></textarea>
+                      </div>
+                    </div>
+                    {/* <table>
                   <tr>
                     <td> */}
-                <Dropdown>
-                  <DropdownButton
-                    variant="secondary"
-                    id="dropdown-basic"
-                    title={type}
-                    // className="dropBtn"
-                    //   style={userButton}
-                  >
-                    <Dropdown.Item
-                      as="button"
-                      onClick={(e) => onSetType(e, 1, "sacral")}
-                    >
-                      Sacral
-                    </Dropdown.Item>
-                  </DropdownButton>
-                </Dropdown>
-                {/* </td>
+                    <Dropdown>
+                      <DropdownButton
+                        variant="secondary"
+                        id="dropdown-basic"
+                        title={type}
+                        className="drop-btn"
+                      >
+                        <Dropdown.Item
+                          as="button"
+                          onClick={(e) => onSetType(e, 1, "sacral")}
+                        >
+                          Sacral
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          as="button"
+                          onClick={(e) => onSetType(e, 2, "castle")}
+                        >
+                          Castle
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          as="button"
+                          onClick={(e) => onSetType(e, 3, "attraction")}
+                        >
+                          Attraction
+                        </Dropdown.Item>
+                      </DropdownButton>
+                    </Dropdown>
+                    {/* </td>
                     <td> */}
-                <Dropdown>
-                  <DropdownButton
-                    variant="secondary"
-                    id="dropdown-basic"
-                    title={status}
-                    // className="dropBtn"
-                    //   style={userButton}
-                  >
-                    <Dropdown.Item
-                      as="button"
-                      onClick={(e) => onSetStatus(e, 1, "active")}
-                    >
-                      Active
-                    </Dropdown.Item>
-                  </DropdownButton>
-                </Dropdown>
-                {/* </td>
+                    <Dropdown>
+                      <DropdownButton
+                        variant="secondary"
+                        id="dropdown-basic"
+                        title={status}
+                        className="drop-btn"
+                      >
+                        <Dropdown.Item
+                          as="button"
+                          onClick={(e) => onSetStatus(e, 1, "active")}
+                        >
+                          Active
+                        </Dropdown.Item>
+                      </DropdownButton>
+                    </Dropdown>
+                    {/* </td>
                   </tr>
                   <tr>
                     <td> */}
-                <Dropdown>
-                  <DropdownButton
-                    variant="secondary"
-                    id="dropdown-basic"
-                    title={material}
-                    // className="dropBtn"
-                    //   style={userButton}
-                  >
-                    <Dropdown.Item
-                      as="button"
-                      onClick={(e) => onSetMaterial(e, 1, "wood")}
-                    >
-                      Wood
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      as="button"
-                      onClick={(e) => onSetMaterial(e, 1, "brick")}
-                    >
-                      Brick
-                    </Dropdown.Item>
-                  </DropdownButton>
-                </Dropdown>
-                {/* </td>
+                    <Dropdown>
+                      <DropdownButton
+                        variant="secondary"
+                        id="dropdown-basic"
+                        title={material}
+                        className="drop-btn"
+                      >
+                        <Dropdown.Item
+                          as="button"
+                          onClick={(e) => onSetMaterial(e, 1, "wood")}
+                        >
+                          Wood
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          as="button"
+                          onClick={(e) => onSetMaterial(e, 1, "brick")}
+                        >
+                          Brick
+                        </Dropdown.Item>
+                      </DropdownButton>
+                    </Dropdown>
+                    {/* </td>
                     <td> */}
-                <Dropdown>
-                  <DropdownButton
-                    variant="secondary"
-                    id="dropdown-basic"
-                    title={archTitle}
-                    // className="dropBtn"
-                    //   style={userButton}
-                  >
-                    <Dropdown.Item
-                      // as="button"
-                      onClick={(e) => onSetStyle(e, 1, "baroque")}
-                    >
-                      Baroque
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      // as="button"
-                      onClick={(e) => onSetStyle(e, 2, "eclecticism")}
-                    >
-                      Eclecticism
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      // as="button"
-                      onClick={(e) => onSetStyle(e, 3, "moorish")}
-                    >
-                      Moorish
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      // as="button"
-                      onClick={(e) => onSetStyle(e, 4, "gothic revival")}
-                    >
-                      Gothic Revival
-                    </Dropdown.Item>
-                  </DropdownButton>
-                </Dropdown>
-                {/* </td>
+                    <Dropdown>
+                      <DropdownButton
+                        variant="secondary"
+                        id="dropdown-basic"
+                        title={archTitle}
+                        className="drop-btn"
+                      >
+                        <Dropdown.Item
+                          // as="button"
+                          onClick={(e) => onSetStyle(e, 1, "baroque")}
+                        >
+                          Baroque
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          // as="button"
+                          onClick={(e) => onSetStyle(e, 2, "eclecticism")}
+                        >
+                          Eclecticism
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          // as="button"
+                          onClick={(e) => onSetStyle(e, 3, "moorish")}
+                        >
+                          Moorish
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          // as="button"
+                          onClick={(e) => onSetStyle(e, 4, "gothic revival")}
+                        >
+                          Gothic Revival
+                        </Dropdown.Item>
+                      </DropdownButton>
+                    </Dropdown>
+                    {/* </td>
                   </tr>
                 </table> */}
 
-                <div className="form-group">
-                  <button
-                    className="btn btn-dark btn-lg btn-block"
-                    // type="submit"
-                    onClick={handleAddConstruction}
-                  >
-                    Add construction
-                  </button>
-                </div>
-                {message && (
-                  <div className="form-group">
-                    <div className="alert alert-danger" role="alert">
-                      {message}
+                    <div className="form-group">
+                      <button
+                        className="btn btn-dark btn-lg btn-block"
+                        // type="submit"
+                        onClick={handleAddConstruction}
+                      >
+                        Add construction
+                      </button>
                     </div>
+                    {/* {message && (
+                      <div className="form-group">
+                        <div className="alert alert-danger" role="alert">
+                          {message}
+                        </div>
+                      </div>
+                    )} */}
+                    <CheckButton style={{ display: "none" }} ref={checkBtn} />
                   </div>
-                )}
-                <CheckButton style={{ display: "none" }} ref={checkBtn} />
+                </div>
               </div>
             </div>
-          </div>
+          )}
+          {message && (
+            <div className="form-group">
+              <div
+                className={
+                  successful ? "alert alert-success" : "alert alert-danger"
+                }
+                role="alert"
+              >
+                {message}
+              </div>
+            </div>
+          )}
+          <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>
       </div>
     </div>

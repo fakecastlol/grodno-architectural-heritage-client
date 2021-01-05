@@ -11,6 +11,22 @@
   text-align: center;
 }
 
-.dropBtn {
+.drop-btn {
   width: 100%;
+  display: inline-grid;
+  padding-bottom: 0.5em;
+}
+
+.textStyle {
+  width: 100%;
+}
+
+.form-info {
+  word-wrap: break-word;
+}
+
+.inner {
+  min-width: 400px;
+  max-width: 500px;
+  width: auto;
 }

@@ -79,7 +79,7 @@ const Construction = (props) => {
   const columns = [
     { dataField: "name", text: "Name", sort: true },
     { dataField: "address", text: "Address" },
-    { dataField: "location", text: "Location" },
+    // { dataField: ["latitude", "longitude"], text: "Location" },
     // { dataField: "login", text: "Login", sort: true },
     {
       btn: "id",
