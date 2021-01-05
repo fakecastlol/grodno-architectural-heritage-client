@@ -5,20 +5,15 @@ import { Redirect, Route, withRouter } from "react-router-dom";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-
 import { login } from "../actions/auth";
-
+import {
+  required,
+  validEmail,
+  vpassword,
+} from "../helpers/validation";
 import "./identity.css";
 
-const required = (value) => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
-      </div>
-    );
-  }
-};
+
 
 const Login = (props) => {
   const form = useRef();
@@ -26,7 +21,8 @@ const Login = (props) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  const [successful, setSuccessful] = useState(false);
 
   const { isLoggedIn } = useSelector((state) => state.auth);
   const [message, setMessage] = useState("");
@@ -47,7 +43,8 @@ const Login = (props) => {
     e.preventDefault();
 
     setMessage("");
-    setLoading(true);
+    // setLoading(true);
+    setSuccessful(true);
 
     form.current.validateAll();
 
@@ -58,10 +55,12 @@ const Login = (props) => {
           // window.location.reload();
         })
         .catch(() => {
-          setLoading(false);
+          // setLoading(false);
+          setSuccessful(false);
         });
     } else {
-      setLoading(false);
+      // setLoading(false);
+      setSuccessful(false);
     }
 
     if (isLoggedIn) {
@@ -74,57 +73,63 @@ const Login = (props) => {
       <div className="inner">
         <Form onSubmit={handleLogin} ref={form}>
           <h3>Login</h3>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <Input
-              type="email"
-              className="form-control"
-              name="email"
-              placeholder="Enter email"
-              value={email}
-              onChange={onChangeEmail}
-              validations={[required]}
-            />
-          </div>
+          {!successful && (
+            <div>
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <Input
+                  type="email"
+                  className="form-control"
+                  name="email"
+                  placeholder="Enter email"
+                  value={email}
+                  onChange={onChangeEmail}
+                  validations={[required, validEmail]}
+                />
+              </div>
 
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <Input
-              type="password"
-              className="form-control"
-              name="password"
-              placeholder="Enter password"
-              value={password}
-              onChange={onChangePassword}
-              validations={[required]}
-            />
-          </div>
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <Input
+                  type="password"
+                  className="form-control"
+                  name="password"
+                  placeholder="Enter password"
+                  value={password}
+                  onChange={onChangePassword}
+                  validations={[required, vpassword]}
+                />
+              </div>
 
-          <div className="form-group">
-            <div className="custom-control custom-checkbox">
-              <input
-                type="checkbox"
-                className="custom-control-input"
-                id="customCheck1"
-              />
-              <label className="custom-control-label" htmlFor="customCheck1">
-                Remember me
-              </label>
+              <div className="form-group">
+                <div className="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    className="custom-control-input"
+                    id="customCheck1"
+                  />
+                  <label
+                    className="custom-control-label"
+                    htmlFor="customCheck1"
+                  >
+                    Remember me
+                  </label>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <button
+                  className="btn btn-dark btn-lg btn-block"
+                  disabled={successful}
+                >
+                  {successful && (
+                    <span className="spinner-border spinner-border-sm"></span>
+                  )}
+                  <span>Login</span>
+                </button>
+              </div>
             </div>
-          </div>
-
-          <div className="form-group">
-            <button
-              className="btn btn-dark btn-lg btn-block"
-              disabled={loading}
-            >
-              {loading && (
-                <span className="spinner-border spinner-border-sm"></span>
-              )}
-              <span>Login</span>
-            </button>
-          </div>
-
+          )}
           {message && (
             <div className="form-group">
               <div className="alert alert-danger" role="alert">
