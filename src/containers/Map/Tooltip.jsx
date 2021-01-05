@@ -8,7 +8,7 @@ const Tooltip = ({
   const { id } = feature.properties;
 
   return (
-    <div id={`tooltip-${id}`}>
+    <div id={`tooltip-${id}`} className="sidebar-style">
       <strong>Source Layer:</strong> {feature.layer["source-layer"]}
       <br />
       <strong>Layer ID:</strong> {feature.layer.id}
