@@ -24,22 +24,17 @@
   color: white;
 }
 
-.navbar-identity
-{
+.navbar-identity {
   margin-right: 20em;
 }
 
-
-
-.navbar-logo
-{
+.navbar-logo {
   margin-left: 18em;
 }
 
 .App-link {
   color: #61dafb;
 }
-
 
 @keyframes App-logo-spin {
   from {
@@ -53,4 +48,26 @@
 .card-container.card {
   max-width: 350px !important;
   padding: 40px 40px;
+}
+
+.full-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.content-wrapper {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.footer-wrapper {
+  flex: 0 0 auto;
+}
+
+.header-style {
+  position: fixed;
+  top: 0;
 }

@@ -1,67 +1,34 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
-import paginationFactory, {
-  PaginationProvider,
-  PaginationListStandalone,
-} from "react-bootstrap-table2-paginator";
+import paginationFactory from "react-bootstrap-table2-paginator";
 import * as ReactBootStrap from "react-bootstrap";
 import filterFactory from "react-bootstrap-table2-filter";
-
-import Axios from "axios";
-import authHeader from "../../helpers/auth-header";
 import "./board.css";
 import "../../index.css";
-import authName from "../../constants/authorities";
 import { roleToString } from "../../constants/authorities";
-
-const inner = {
-  width: "auto",
-};
-
-const tableHeader1 = {
-  backgroundColor: "#6c757d",
-  borderColor: "#6c757d",
-  marginTop: 100,
-  color: "white",
-};
-
-const userButton = {
-  margin: "auto",
-  align: "center",
-};
-
-const manageForm = {
-  display: "flex",
-  flexDirection: "row",
-  flexWrap: "nowrap",
-};
+import { getUsers } from "../../services/admin.service";
 
 const BoardAdmin = (props) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(1);
-
-  // const dispatch = useDispatch();
+  const [totalCount, setTotalCount] = useState();
 
   const getPagedData = useCallback(async (params = {}) => {
     try {
       setLoading(true);
-      const data = await Axios.get("https://localhost:5001/users", {
-        headers: authHeader(),
-        params,
-      });
-      console.log(data.data);
-      setUsers(data.data);
+      /**
+       * TODO: check server
+       */
+      const data = await getUsers(params);
+      setUsers(data.data.users);
+      setTotalCount(data.data.pageViewModel.count);
       setLoading(false);
     } catch (e) {
       setLoading(false);
     }
   }, []);
-
-  useEffect(() => {
-    getPagedData({ page, pageSize });
-  }, [getPagedData, page, pageSize]);
 
   const handleTableChange = useCallback((type, options) => {
     const { page, sizePerPage } = options;
@@ -69,91 +36,92 @@ const BoardAdmin = (props) => {
     setPageSize(sizePerPage);
   }, []);
 
-  const handleActionsOnClick = (id) => {
-    props.history.push(`/manageuser/${id}`);
-  };
+  const handleActionsOnClick = useCallback(
+    (id) => {
+      props.history.push(`/manageuser/${id}`);
+    },
+    [props.history]
+  );
 
-  const columns = [
-    { dataField: "email", text: "Email", sort: true },
-    {
-      dataField: "role",
-      text: "Role",
-      sort: true,
-      formatter: (role) => {
-        return roleToString(role);
+  const columns = useMemo(() => {
+    return [
+      { dataField: "email", text: "Email", sort: true },
+      {
+        dataField: "role",
+        text: "Role",
+        sort: true,
+        formatter: (role) => {
+          return roleToString(role);
+        },
       },
-    },
-    // { dataField: "id", text: "Id" },
-    { dataField: "login", text: "Login", sort: true },
-    {
-      btn: "id",
-      dataField: "id",
-      text: "Action",
-      formatter: (id) => {
-        return (
-          <div style={manageForm}>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              onClick={() => handleActionsOnClick(id)}
-              style={userButton}
-            >
-              profile
-            </button>
-          </div>
-        );
+      { dataField: "login", text: "Login", sort: true },
+      {
+        btn: "id",
+        dataField: "id",
+        text: "Action",
+        formatter: (id) => {
+          return (
+            <div className="manageForm">
+              <button
+                type="button"
+                class="btn btn-secondary userButton"
+                onClick={() => handleActionsOnClick(id)}
+              >
+                profile
+              </button>
+            </div>
+          );
+        },
       },
-    },
-  ];
+    ];
+  }, [handleActionsOnClick]);
+
+  const paginationOptions = useMemo(() => {
+    return {
+      custom: false,
+      page,
+      sizePerPage: pageSize,
+      totalSize: totalCount,
+      showTotal: true,
+      firstPageText: "First",
+      prePageText: "Back",
+      nextPageText: "Next",
+      lastPageText: "Last",
+      nextPageTitle: "First page",
+      prePageTitle: "Pre page",
+      firstPageTitle: "Next page",
+      lastPageTitle: "Last page",
+    };
+  }, [page, pageSize, totalCount]);
+
+  useEffect(() => {
+    getPagedData({ page, pageSize });
+  }, [getPagedData, page, pageSize]);
 
   return (
-    // <div className="outer">
-    //   <div className="inner" style={inner}>
     <div className="container">
-      <PaginationProvider
-        pagination={paginationFactory({
-          custom: true,
-          page,
-          sizePerPage: setPageSize,
-          totalSize: users.count,
-        })}
-      >
-        {({ paginationProps, paginationTableProps }) => (
-          <div className="container">
-            {
-              loading ? (
-                <ReactBootStrap.Spinner animation="border" />
-              ) : (
-                // <div >
-                <div class="row" className="hdr">
-                  {/* <div class="col-sm-12 btn btn-info" style={tableHeader1}>
-                    {`LIST OF USERS`}
-                  </div> */}
-                  <div className="tHeader">
-                    <h3>List of users</h3>
-                  </div>
-                  <BootstrapTable
-                    bordered
-                    hover
-                    remote
-                    keyField="id"
-                    data={users.itemList ?? []}
-                    columns={columns}
-                    onTableChange={handleTableChange}
-                    {...paginationTableProps}
-                    // filterFactory={filterFactory()}
-                  />
-                </div>
-              )
-              // </div>
-            }
-            <PaginationListStandalone {...paginationProps} />
+      {loading ? (
+        <ReactBootStrap.Spinner animation="border" />
+      ) : (
+        <div class="row" className="hdr">
+          <div className="tHeader">
+            <h3>List of users</h3>
           </div>
-        )}
-      </PaginationProvider>
-      {/* //   </div> */}
+          <BootstrapTable
+            bordered
+            hover
+            remote
+            keyField="id"
+            data={users ?? []}
+            columns={columns}
+            onTableChange={handleTableChange}
+            pagination={paginationFactory(paginationOptions)}
+            filter={filterFactory()}
+            sort={{ dataField: "email", order: 0 }}
+          />
+        </div>
+      )}
     </div>
-    // </div>
   );
 };
 

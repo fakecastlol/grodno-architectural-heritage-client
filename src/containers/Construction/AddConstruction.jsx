@@ -1,58 +1,24 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Redirect, useParams, useLocation } from "react-router-dom";
-import moment from "moment";
-import { getConstruction } from "../../actions/construction";
+import React, { useState, useRef } from "react";
 import { ConstructionService } from "../../services";
-// import { ProfileService } from "../../../services";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
-// import { ConstructionService } from "../../services/";
 import { required, validCoordinates } from "../../helpers/validation";
 import CheckButton from "react-validation/build/button";
 
-const container = {
-  marginTop: 100,
-};
-
 const info = {
   textAlign: "left",
-  // marginLeft: 350,
-  // marginTop: 20,
 };
 
 const formStyle = {
-  // display: "flex",
   width: "100%",
-  // marginLeft: 10
   marginRight: 40,
-  // marginTop: 'auto'
 };
 
 const pStyle = {
   display: "flex",
   justifyContent: "space-between",
-};
-
-const applyStyle = {
-  // marginLeft: "100"
-  margin: "auto",
-};
-
-const editStyle = {
-  margin: "auto",
-};
-
-const buttons = {
-  display: "flex",
-  justifyContent: "space-between",
-};
-
-const textStyle = {
-  height: "80px",
-  width: "100%",
 };
 
 const AddConstruction = (props) => {
@@ -163,8 +129,8 @@ const AddConstruction = (props) => {
           // onSubmin={handleAddConstruction}
           ref={form}
         >
-          <h3>Construction</h3>
-          {!successful && (
+          {!successful && <h3>Construction</h3>}
+          {!successful ? (
             <div>
               <div className="info" style={info}>
                 <div>
@@ -182,10 +148,7 @@ const AddConstruction = (props) => {
                   <div className="fields">
                     <div style={pStyle}>
                       <strong>Name:</strong>
-                      <div
-                        className="form-group"
-                        // style={formStyle}
-                      >
+                      <div className="form-group">
                         <Input
                           type="text"
                           className="form-control"
@@ -199,10 +162,7 @@ const AddConstruction = (props) => {
 
                     <div style={pStyle}>
                       <strong>Address:</strong>
-                      <div
-                        className="form-group"
-                        // style={formStyle}
-                      >
+                      <div className="form-group">
                         <Input
                           type="text"
                           className="form-control"
@@ -215,10 +175,7 @@ const AddConstruction = (props) => {
 
                     <div style={pStyle}>
                       <strong>Location:</strong>
-                      <div
-                        className="form-group"
-                        // style={formStyle}
-                      >
+                      <div className="form-group">
                         <Input
                           type="text"
                           className="form-control"
@@ -232,10 +189,7 @@ const AddConstruction = (props) => {
 
                     <div style={pStyle}>
                       <strong>Article:</strong>
-                      <div
-                        className="form-group"
-                        // style={formStyle}
-                      >
+                      <div className="form-group">
                         <Input
                           type="text"
                           className="form-control"
@@ -248,10 +202,7 @@ const AddConstruction = (props) => {
 
                     <div style={pStyle}>
                       <strong>Build date:</strong>
-                      <div
-                        className="form-group"
-                        // style={formStyle}
-                      >
+                      <div className="form-group">
                         <Input
                           type="date"
                           className="form-control"
@@ -264,10 +215,7 @@ const AddConstruction = (props) => {
 
                     <div style={pStyle}>
                       <strong>Lost date:</strong>
-                      <div
-                        className="form-group"
-                        // style={formStyle}
-                      >
+                      <div className="form-group">
                         <Input
                           type="date"
                           className="form-control"
@@ -280,18 +228,15 @@ const AddConstruction = (props) => {
 
                     <div>
                       <strong>Description:</strong>
-                      <div class="form-group">
+                      <div className="form-group">
                         <textarea
-                          class="form-control"
+                          className="form-control"
                           id="exampleFormControlTextarea1"
                           rows="3"
                           onChange={(e) => onChangeFormData(e, "description")}
                         ></textarea>
                       </div>
                     </div>
-                    {/* <table>
-                  <tr>
-                    <td> */}
                     <Dropdown>
                       <DropdownButton
                         variant="secondary"
@@ -319,8 +264,6 @@ const AddConstruction = (props) => {
                         </Dropdown.Item>
                       </DropdownButton>
                     </Dropdown>
-                    {/* </td>
-                    <td> */}
                     <Dropdown>
                       <DropdownButton
                         variant="secondary"
@@ -334,12 +277,20 @@ const AddConstruction = (props) => {
                         >
                           Active
                         </Dropdown.Item>
+                        <Dropdown.Item
+                          as="button"
+                          onClick={(e) => onSetStatus(e, 2, "abandoned")}
+                        >
+                          Abandoned
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          as="button"
+                          onClick={(e) => onSetStatus(e, 3, "destroyed")}
+                        >
+                          Destroyed
+                        </Dropdown.Item>
                       </DropdownButton>
                     </Dropdown>
-                    {/* </td>
-                  </tr>
-                  <tr>
-                    <td> */}
                     <Dropdown>
                       <DropdownButton
                         variant="secondary"
@@ -361,8 +312,6 @@ const AddConstruction = (props) => {
                         </Dropdown.Item>
                       </DropdownButton>
                     </Dropdown>
-                    {/* </td>
-                    <td> */}
                     <Dropdown>
                       <DropdownButton
                         variant="secondary"
@@ -371,39 +320,30 @@ const AddConstruction = (props) => {
                         className="drop-btn"
                       >
                         <Dropdown.Item
-                          // as="button"
                           onClick={(e) => onSetStyle(e, 1, "baroque")}
                         >
                           Baroque
                         </Dropdown.Item>
                         <Dropdown.Item
-                          // as="button"
                           onClick={(e) => onSetStyle(e, 2, "eclecticism")}
                         >
                           Eclecticism
                         </Dropdown.Item>
                         <Dropdown.Item
-                          // as="button"
                           onClick={(e) => onSetStyle(e, 3, "moorish")}
                         >
                           Moorish
                         </Dropdown.Item>
                         <Dropdown.Item
-                          // as="button"
                           onClick={(e) => onSetStyle(e, 4, "gothic revival")}
                         >
                           Gothic Revival
                         </Dropdown.Item>
                       </DropdownButton>
                     </Dropdown>
-                    {/* </td>
-                  </tr>
-                </table> */}
-
                     <div className="form-group">
                       <button
                         className="btn btn-dark btn-lg btn-block"
-                        // type="submit"
                         onClick={handleAddConstruction}
                       >
                         Add construction
@@ -420,6 +360,10 @@ const AddConstruction = (props) => {
                   </div>
                 </div>
               </div>
+            </div>
+          ) : (
+            <div>
+              <h2>Construction added successfully</h2>
             </div>
           )}
           {message && (

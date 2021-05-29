@@ -2,8 +2,15 @@ import axios from "axios";
 import API_URL from "../constants/api.url";
 import authHeader from "../helpers/auth-header";
 
-const getUsers = () => {
-  return axios.get(API_URL + "users");
+const getUsers = async (params) => {
+  try {
+    return await axios.get(API_URL + "users", {
+      headers: authHeader(),
+      params,
+    });
+  } catch (e) {
+    console.error(e.message);
+  }
 };
 
 const getUser = async (id) => {
@@ -12,22 +19,23 @@ const getUser = async (id) => {
       headers: authHeader(),
       params: { id },
     });
-    // console.log(data);
-  } catch (e) {}
+  } catch (e) {
+    console.error(e.message);
+  }
 };
 
 const deleteUser = async (id) => {
   try {
-    console.log(id);
     return await axios.delete(API_URL + "delete", {
       headers: authHeader(),
       data: { id },
     });
-  } catch (e) {}
+  } catch (e) {
+    console.error(e.message);
+  }
 };
 
 const setRole = async (id, role) => {
-  console.log(id, role);
   try {
     return await axios.post(
       API_URL + "role",
@@ -36,7 +44,9 @@ const setRole = async (id, role) => {
         headers: authHeader(),
       }
     );
-  } catch (e) {}
+  } catch (e) {
+    console.error(e.message);
+  }
 };
 
 export { getUsers, getUser, deleteUser, setRole };

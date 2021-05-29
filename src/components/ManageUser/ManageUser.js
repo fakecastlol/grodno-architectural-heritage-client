@@ -1,43 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import moment from "moment";
-import { getUser } from "../../../actions/manageUser";
-import { AdminService } from "../../../services";
-import { ProfileService } from "../../../services";
+import { getUser } from "../../actions/manageUser";
+import { AdminService, ProfileService } from "../../services";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import { roleToString } from "../../../constants/authorities";
-
-const inner = {
-  width: "auto",
-};
-
-const container = {
-  // marginTop: 100,
-};
-
-const info = {
-  textAlign: "left",
-};
-
-const userButton = {
-  align: "center",
-};
-
-const manageForm = {
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "space-between",
-  flexWrap: "nowrap",
-  width: "100%",
-};
-
-const img = {
-  textAlign: "center",
-};
+import { roleToString } from "../../constants/authorities";
+import ManageUserInfo from "./ManageUserInfo";
 
 const ManageUser = (props) => {
   const { id } = useParams();
@@ -69,8 +39,6 @@ const ManageUser = (props) => {
   );
 
   const handleOnChangeRole = async (role) => {
-    console.log(user.id, role);
-    console.log(user);
     const { id } = user;
     await AdminService.setRole(id, role);
     dispatch(getUser(id), [id, dispatch]);
@@ -78,64 +46,28 @@ const ManageUser = (props) => {
 
   const handleDeleteOnClick = async (id) => {
     await AdminService.deleteUser(id);
-    // await AdminService.getUsers();
     props.history.push("/admin");
   };
 
   return (
     <div className="outer">
-      <div className="inner" style={inner}>
-        <div className="container" style={container}>
+      <div className="inner">
+        <div className="container">
           <h3>{`Authorities: ${roleToString(user.role)}`}</h3>
-          <div className="info" style={info}>
-            <div class="container" style={img}>
-              {image && <img src={image} height={100} width={100} />}
-            </div>
-            <p>
-              <strong>{`Email: `}</strong> {user.email}
-            </p>
-            {user.firstName && (
-              <p>
-                <strong>{`First name:`}</strong> {user.firstName}
-              </p>
-            )}
-            {user.lastName && (
-              <p>
-                <strong>{`Last name: `}</strong> {user.lastName}
-              </p>
-            )}
-            {user.login && (
-              <p>
-                <strong>{`Login: `}</strong> {user.login}
-              </p>
-            )}
-            <p>
-              <strong>{`Registration date: `}</strong> {formatRegistration}
-            </p>
-            <p>
-              <strong>{`Last visited: `}</strong> {formatLastVisited}
-            </p>
-            {user.location && (
-              <p>
-                <strong>{`Location: `}</strong> {user.location}
-              </p>
-            )}
-            <p>
-              <strong>{`Article count: `}</strong> {user.articleCount}
-            </p>
-            <p>
-              <strong>{`Messages count: `}</strong> {user.messagesCount}
-            </p>
-            <p>
-              <strong>{`Rank: `}</strong> {user.rank}
-            </p>
-            <div style={manageForm}>
+          <div className="info">
+            <ManageUserInfo
+              image={image}
+              user={user}
+              formatRegistration={formatRegistration}
+              formatLastVisited={formatLastVisited}
+            />
+            <div className="manageForm">
               <Dropdown>
                 <DropdownButton
                   variant="secondary"
                   id="dropdown-basic"
                   title="Set role"
-                  style={userButton}
+                  className="userButton"
                 >
                   <Dropdown.Item
                     as="button"
@@ -152,24 +84,23 @@ const ManageUser = (props) => {
                   </Dropdown.Item>
                 </DropdownButton>
               </Dropdown>
-              <Dropdown>
+              {/* <Dropdown>
                 <DropdownButton
                   variant="secondary"
                   id="dropdown-basic"
                   title="Ban user"
-                  style={userButton}
+                  className="userButton"
                 >
                   <Dropdown.Item as="button">Day</Dropdown.Item>
                   <Dropdown.Item as="button">Week</Dropdown.Item>
                   <Dropdown.Item as="button">Month</Dropdown.Item>
                   <Dropdown.Item as="button">Permanent</Dropdown.Item>
                 </DropdownButton>
-              </Dropdown>
+              </Dropdown> */}
               <button
                 type="button"
-                class="btn btn-danger"
+                class="btn btn-danger userButton"
                 onClick={() => handleDeleteOnClick(user.id)}
-                style={userButton}
               >
                 Delete user
               </button>

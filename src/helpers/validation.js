@@ -30,8 +30,10 @@ const vpassword = (value) => {
   }
 };
 
-const vConfirmPassword = (password, confirm) => {
-  if (password !== confirm) {
+const vConfirmPassword = (value, props, components) => {
+  const val1 = components.password[0].value;
+  const val2 = components.password[1].value;
+  if (val1 !== val2) {
     return (
       <div className="alert alert-danger" role="alert">
         Passwords do not match.

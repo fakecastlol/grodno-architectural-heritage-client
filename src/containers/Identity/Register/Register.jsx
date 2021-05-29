@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
+import { useSelector } from "react-redux";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
@@ -9,22 +8,20 @@ import {
   validEmail,
   vpassword,
   vConfirmPassword,
-} from "../helpers/validation";
-import { register } from "../actions/auth";
-
-import "./identity.css";
+} from "../../../helpers/validation";
+import useRegister from "./registerHook";
+import "../identity.css";
 
 const Register = (props) => {
-  const form = useRef();
-  const checkBtn = useRef();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [successful, setSuccessful] = useState(false);
+  const [loading, register] = useRegister(props.history.push);
+
+  const form = useRef();
+  const checkBtn = useRef();
 
   const { message } = useSelector((state) => state.message);
-  const dispatch = useDispatch();
 
   const onChangeEmail = (e) => {
     const email = e.target.value;
@@ -42,30 +39,10 @@ const Register = (props) => {
   };
 
   const handleRegister = (e) => {
-    if (password !== confirmPassword) {
-      return (
-        <div className="alert alert-danger" role="alert">
-          Passwords do not match.
-        </div>
-      );
-    } else {
-      e.preventDefault();
-      //e.stopPropogation();
-      setSuccessful(false);
-
-      form.current.validateAll();
-
-      if (checkBtn.current.context._errors.length === 0) {
-        dispatch(register(email, password, confirmPassword))
-          .then(() => {
-            setSuccessful(true);
-            props.history.push("/home");
-            // window.location.reload();
-          })
-          .catch(() => {
-            setSuccessful(false);
-          });
-      }
+    e.preventDefault();
+    form.current.validateAll();
+    if (checkBtn.current.context._errors.length === 0) {
+      register(email, password, confirmPassword);
     }
   };
 
@@ -73,8 +50,8 @@ const Register = (props) => {
     <div className="outer">
       <div className="inner">
         <Form onSubmit={handleRegister} ref={form}>
-          <h3> Register</h3>
-          {!successful && (
+          {!loading && <h3> Register</h3>}
+          {!loading ? (
             <div>
               <div className="form-group">
                 <label htmlFor="email">Email</label>
@@ -109,9 +86,9 @@ const Register = (props) => {
                   className="form-control"
                   name="password"
                   placeholder="Enter password"
-                  value={[confirmPassword]}
+                  value={confirmPassword}
                   onChange={onChangeConfirmPassword}
-                  validations={[required]}
+                  validations={[required, vConfirmPassword]}
                 />
               </div>
 
@@ -121,13 +98,17 @@ const Register = (props) => {
                 </button>
               </div>
             </div>
+          ) : (
+            <div>
+              <h2>Register success!</h2>
+            </div>
           )}
 
           {message && (
             <div className="form-group">
               <div
                 className={
-                  successful ? "alert alert-success" : "alert alert-danger"
+                  loading ? "alert alert-success" : "alert alert-danger"
                 }
                 role="alert"
               >
@@ -137,9 +118,16 @@ const Register = (props) => {
           )}
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
 
-          <p className="forgot-password text-right">
-            Already registered <a href="/login">log in?</a>
-          </p>
+          {!loading && (
+            <div>
+              <p className="forgot-password text-right">
+                Forgot <a href="/forgot">password?</a>
+              </p>
+              <p className="forgot-password text-right">
+                Already registered <a href="/login">log in?</a>
+              </p>
+            </div>
+          )}
         </Form>
       </div>
     </div>

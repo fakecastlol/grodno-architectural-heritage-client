@@ -209,8 +209,49 @@
 
 .img {
   text-align: center;
+  /* max-height: 200px !important; */
+}
+
+.profile-img {
+  max-height: 250px;
 }
 
 .form-group.preview {
-  text-align: center;
+  /* max-height: 250px; */
+  /* text-align: center; */
+}
+
+.info-form {
+  text-align: left;
+}
+
+.formStyle {
+  width: 100%;
+  margin-right: 40;
+}
+
+.pStyle {
+  display: flex;
+  justify-content: space-between;
+}
+
+.applyStyle {
+  margin: auto;
+}
+
+.editStyle {
+  margin: auto;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile-form {
+  /* max-width: 400px !important; */
+}
+
+.preview {
+  /* max-height: 250px; */
 }

@@ -1,0 +1,34 @@
+.footer {
+  justify-content: center;
+  text-align: center !important;
+  bottom: 0 !important;
+  flex: 0 0 auto !important;
+  width: 100%;
+  margin-bottom: 0 !important;
+}
+
+.top-footer {
+  background-color: #343a40 !important;
+  color: white;
+  text-align: center !important;
+  justify-content: center;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.bottom-footer {
+  background-color: #212529 !important;
+  color: white;
+}
+
+.footer-content {
+  margin: auto;
+}
+
+.links {
+  /* margin-top: 10px; */
+}
+
+.link {
+  color: white;
+}

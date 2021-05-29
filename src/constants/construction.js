@@ -1,14 +1,16 @@
 export const styleToString = (style) => {
   switch (style) {
     case 1:
-      return "Baroque";
+      return "baroque";
 
     case 2:
-      return "Eclecticism";
+      return "eclecticism";
+
     case 3:
-      return "Moorish";
+      return "moorish";
+
     case 4:
-      return "Gothic Revival";
+      return "gothic revival";
 
     default:
       return "";
@@ -18,10 +20,10 @@ export const styleToString = (style) => {
 export const materialToString = (material) => {
   switch (material) {
     case 1:
-      return "Wood";
+      return "wood";
 
     case 2:
-      return "Brick";
+      return "brick";
 
     default:
       return "";
@@ -31,13 +33,13 @@ export const materialToString = (material) => {
 export const typeToString = (type) => {
   switch (type) {
     case 1:
-      return "Sacral";
+      return "sacral";
 
     case 2:
-      return "Castle";
+      return "castle";
 
     case 3:
-      return "Attraction";
+      return "attraction";
 
     default:
       return "";
@@ -47,7 +49,13 @@ export const typeToString = (type) => {
 export const statusToString = (status) => {
   switch (status) {
     case 1:
-      return "Active";
+      return "active";
+
+    case 2:
+      return "abandoned";
+
+    case 3:
+      return "destroyed";
 
     default:
       return "";

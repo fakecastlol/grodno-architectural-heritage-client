@@ -8,7 +8,6 @@ export const updateProfile = (user) => (dispatch) => {
         type: UPDATE_USER_PROFILE,
         payload: response.data,
       });
-      // return Promise.resolve(response.data);
     })
     .catch((e) => console.log(e));
 };

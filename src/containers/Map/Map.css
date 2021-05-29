@@ -6,6 +6,11 @@
   right: 0;
 }
 
+.mapboxgl-ctrl-geocoder.mapboxgl-ctrl {
+ margin-top: 70px;
+ width: 300px;
+}
+
 .menu {
   margin-top: 70px;
   background: a(0.8);
@@ -23,9 +28,11 @@
 
 .geocoder {
   display: table-cell;
-  background-color: forestgreen;
-  justify-content: center;
+  background-color: white;
+  /* justify-content: center; */
   position: absolute;
+  bottom: 50px;
+  text-align: center;
   margin-top: 200px;
   margin-left: 200px;
 }
@@ -45,17 +52,7 @@
   display: inline-block;
 }
 */
-.marker {
-  /* background-image: url("file:///C:/Users/Uladzimir.Babko/AppData/Local/Temp/Temp1_mapbox-maki-6.2.0-2-g7d8563e.zip/mapbox-maki-7d8563e/icons/beach-15.svg"); */
-  /*background-size: cover; */
-  /* marker-symbol:"star"  */
-  /* width: 40px;
-  height: 40px; */
-  /* border-radius: 50%; */
-  /* cursor: pointer; */
-  /* background-color: red;  */
-  will-change: transform;
-}
+
 
 .mapboxgl-popup {
   /* transform: none !important;
@@ -72,11 +69,19 @@
 
 .marker {
   background-size: cover;
-  background-color: white;
+  /* background-color: white; */
   width: 40px;
   height: 40px;
   border-radius: 50%;
   cursor: pointer;
+}
+
+.active {
+  background-color: white;
+}
+
+.destroyed {
+  background-color: red;
 }
 
 .sacral {
@@ -95,6 +100,11 @@
   font-size: large;
 }
 
+.img-style {
+  height: 150px;
+  margin-top: 10px;
+}
+
 /* .sidebar-style {
   display: inline-block;
   position: absolute;
@@ -107,3 +117,9 @@
   padding: 6px;
   font-weight: bold;
 } */
+
+
+.menu.btn-group {
+  top: 0;
+  position: absolute;
+}

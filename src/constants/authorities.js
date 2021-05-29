@@ -9,6 +9,12 @@ export const roleToString = (role) => {
     case 3:
       return "user";
 
+    case 4:
+      return "moderator";
+
+    case 5:
+      return "unchecked";
+
     default:
       return "user";
   }

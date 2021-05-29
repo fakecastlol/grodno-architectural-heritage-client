@@ -11,7 +11,6 @@ export default function (state = initialState, action) {
 
   switch (type) {
     case GET_CONSTRUCTION_DATA:
-      console.log(payload);
       return {
         ...state,
         construction: payload,
@@ -19,7 +18,6 @@ export default function (state = initialState, action) {
       };
 
     case GET_CONSTRUCTIONS_DATA:
-      console.log(payload);
       return {
         ...state,
         constructions: payload,

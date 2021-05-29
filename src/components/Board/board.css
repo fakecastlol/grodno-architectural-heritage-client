@@ -1,12 +1,24 @@
 .page-item.active .page-link {
-  background-color: #6c757d;
-  border-color: #6c757d;
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
 }
 
 .page-item .page-link {
   color: #6c757d;
 }
+
 .tHeader {
   margin-top: 100px;
   margin-bottom: 20px;
+}
+
+.userButton {
+  margin: auto;
+  text-align: center;
+}
+
+.manageForm {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
 }

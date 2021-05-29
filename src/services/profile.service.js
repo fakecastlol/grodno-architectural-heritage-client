@@ -7,7 +7,9 @@ const updateProfile = async (user) => {
     return await axios.post(API_URL + "updateprofile", user, {
       headers: authHeader(),
     });
-  } catch (e) {}
+  } catch (e) {
+    console.error(e.message);
+  }
 };
 
 const getProfileImage = async (id) => {
@@ -16,7 +18,20 @@ const getProfileImage = async (id) => {
       headers: authHeader(),
       params: { id },
     });
-  } catch (e) {}
+  } catch (e) {
+    console.error(e.message);
+  }
 };
 
-export { updateProfile, getProfileImage };
+const confirmEmail = async (email, token) => {
+  try {
+    return await axios.post(API_URL + "confirmemail", {
+      email,
+      token,
+    });
+  } catch (e) {
+    console.error(e.message);
+  }
+};
+
+export { updateProfile, getProfileImage, confirmEmail };

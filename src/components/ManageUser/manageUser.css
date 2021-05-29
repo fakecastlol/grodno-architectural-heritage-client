@@ -1,0 +1,23 @@
+.inner {
+  width: auto;
+}
+
+.info {
+  text-align: left;
+}
+
+.userButton {
+  text-align: center;
+}
+
+.manageForm {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.img {
+  text-align: center;
+}

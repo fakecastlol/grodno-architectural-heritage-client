@@ -1,33 +1,24 @@
 import React, { useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Redirect, Route, withRouter } from "react-router-dom";
-
+import { useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-import { login } from "../actions/auth";
-import {
-  required,
-  validEmail,
-  vpassword,
-} from "../helpers/validation";
-import "./identity.css";
-
-
+import { required, validEmail, vpassword } from "../../../helpers/validation";
+import useLogin from "./loginHook";
+import "../identity.css";
 
 const Login = (props) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const form = useRef();
   const checkBtn = useRef();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  // const [loading, setLoading] = useState(false);
-  const [successful, setSuccessful] = useState(false);
-
+  const { message } = useSelector((state) => state.message);
   const { isLoggedIn } = useSelector((state) => state.auth);
-  const [message, setMessage] = useState("");
 
-  const dispatch = useDispatch();
+  const [loading, login] = useLogin(props.history.push);
 
   const onChangeEmail = (e) => {
     const email = e.target.value;
@@ -42,25 +33,10 @@ const Login = (props) => {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    setMessage("");
-    // setLoading(true);
-    setSuccessful(true);
-
     form.current.validateAll();
 
     if (checkBtn.current.context._errors.length === 0) {
-      dispatch(login(email, password))
-        .then(() => {
-          props.history.push("/profile");
-          // window.location.reload();
-        })
-        .catch(() => {
-          // setLoading(false);
-          setSuccessful(false);
-        });
-    } else {
-      // setLoading(false);
-      setSuccessful(false);
+      login(email, password);
     }
 
     if (isLoggedIn) {
@@ -73,7 +49,7 @@ const Login = (props) => {
       <div className="inner">
         <Form onSubmit={handleLogin} ref={form}>
           <h3>Login</h3>
-          {!successful && (
+          {!loading && (
             <div>
               <div className="form-group">
                 <label htmlFor="email">Email</label>
@@ -101,7 +77,7 @@ const Login = (props) => {
                 />
               </div>
 
-              <div className="form-group">
+              {/* <div className="form-group">
                 <div className="custom-control custom-checkbox">
                   <input
                     type="checkbox"
@@ -115,14 +91,14 @@ const Login = (props) => {
                     Remember me
                   </label>
                 </div>
-              </div>
+              </div> */}
 
               <div className="form-group">
                 <button
                   className="btn btn-dark btn-lg btn-block"
-                  disabled={successful}
+                  disabled={loading}
                 >
-                  {successful && (
+                  {loading && (
                     <span className="spinner-border spinner-border-sm"></span>
                   )}
                   <span>Login</span>
@@ -139,7 +115,7 @@ const Login = (props) => {
           )}
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
           <p className="forgot-password text-right">
-            Forgot <a href="#">password?</a>
+            Forgot <a href="/forgot">password?</a>
           </p>
         </Form>
       </div>

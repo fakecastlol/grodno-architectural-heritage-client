@@ -28,6 +28,7 @@ html,
   justify-content: center;
   flex-direction: column;
   text-align: left;
+  height: 100%;
 }
 
 .outer .form-control:focus {

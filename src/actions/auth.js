@@ -12,7 +12,6 @@ import {AuthService} from "../services";
 export const register = (email, password) => (dispatch) => {
   return AuthService.register(email, password).then(
     (response) => {
-      console.log(response);
       dispatch({
         type: REGISTER_SUCCESS,
       });

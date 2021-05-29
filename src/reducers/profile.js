@@ -8,7 +8,6 @@ export default function (state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
     case UPDATE_USER_PROFILE:
-      console.log(payload)
       return {
         ...state,
         user: payload,

@@ -29,4 +29,49 @@
   min-width: 400px;
   max-width: 500px;
   width: auto;
+  height: 100%;
+}
+
+.info-text {
+  text-align: left;
+}
+
+.userButton {
+  text-align: center;
+}
+
+.manageForm {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* flex-wrap: nowrap; */
+  /* width: 100%; */
+}
+
+.pStyle {
+  display: flex;
+  justify-content: space-between;
+}
+
+.formStyle {
+  width: 100%;
+  margin-right: 40;
+}
+
+.table-header {
+  text-align: center;
+}
+
+.tHeader {
+  margin-top: 85px;
+  /* margin-bottom: 20px; */
+}
+
+.action-button {
+  justify-content: space-evenly;
+  display: flex;
+}
+
+.image-buttons{
+  display: flex;
 }

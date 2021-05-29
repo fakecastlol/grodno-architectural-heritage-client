@@ -1,0 +1,12 @@
+.map-style {
+    z-index: 2000;
+    position: fixed;
+    width: 100%;
+    top: 0;
+}
+
+.header-style {
+    position: fixed;
+    top: 0;
+    width: 100%;
+  }

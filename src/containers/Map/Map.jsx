@@ -1,23 +1,22 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
+// import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { useDispatch, useSelector } from "react-redux";
 import mapboxgl from "mapbox-gl";
-
 import "./Map.css";
 import Tooltip from "./Tooltip";
 import ReactDOM from "react-dom";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
-import { Token, MapLayer, EntryPoint, Bounds, getConstructionType } from "../../constants/mapbox";
-import Geocoder from "react-mapbox-gl-geocoder";
+import { Token, MapLayer, EntryPoint, Bounds } from "../../constants/mapbox";
+import Geocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
-//import construction from "../../reducers/construction";
 import { getConstructions } from "../../actions/construction";
-import construction from "../../reducers/construction";
-import Construction from "../Construction/Construction";
-
-const Marker = {
-  backgroundColor: "red",
-};
+import { statusToString, typeToString } from "../../constants/construction";
+import ConstructionImages from "../Construction/ConstructionImages";
+import { GetImageConstruction } from "../../constants/api.url";
+// import Stats from 'https://threejs.org/examples/jsm/libs/stats.module.js';
+import {Threebox} from 'threebox';
+import * as THREE from 'three';
 
 mapboxgl.accessToken = Token;
 
@@ -28,15 +27,12 @@ const Map = () => {
   // constructions,
   // isLoading
   const objects = useSelector((state) => {
-    console.log("checkstate", state);
     return state.construction.constructions;
   });
-  console.log("constructionsss", objects);
 
   useEffect(() => {
     dispatch(getConstructions());
-    // console.log("constructionsss", kek);
-  }, []);
+  }, [dispatch]);
 
   const mapContainerRef = useRef(null);
   const tooltipRef = useRef(new mapboxgl.Popup({ offset: 15 }));
@@ -44,8 +40,8 @@ const Map = () => {
   const [layer, setLayer] = useState(3);
 
   const [viewport, setViewport] = useState({
-    latitude: 37.7577,
-    longitude: -122.4376,
+    latitude: EntryPoint[0],
+    longitude: EntryPoint[1],
     zoom: 8,
   });
 
@@ -58,28 +54,33 @@ const Map = () => {
     []
   );
 
-  //   const map = new mapboxgl.Map({
-  //     container: mapContainerRef.current,
-  //     style: layers[layer],
-  //     center: [23.829529, 53.677834],
-  //     zoom: 16.5,
-  //     antialias: true,
-  //     pitch: 45,
-  //     bearing: -17.6,
-  //   });
+  const handleSelected = (newViewport, port) => {
+    console.log("handleSelected->newViewport", newViewport);
+    setViewport({
+      longitude: newViewport.latitude,
+      latitude: newViewport.longitude,
+      zoom: 1,
+    });
+    console.log("handleSelected->viewport", viewport);
+  };
+
+  //   const onSelected = (viewport, item) => {
+  //     this.setState({viewport});
+  //     console.log('Selected: ', item)
+  // }
+
+    // const map = new mapboxgl.Map({
+    //   container: mapContainerRef.current,
+    //   style: layers[layer],
+    //   center: [23.829529, 53.677834],
+    //   zoom: 16.5,
+    //   antialias: true,
+    //   pitch: 45,
+    //   bearing: -17.6,
+    // });
 
   // Initialize map when component mounts
   useEffect(() => {
-    // var northWest = mapboxgl.Map.latLng(23.649946, 53.777896),
-    //   southWest = mapboxgl.Map.latLng(23.701109, 53.585526),
-    //   southEast = mapboxgl.Map.latLng(23.937955, 53.569966),
-    //   northEast = mapboxgl.Map.latLng(24.012956, 53.791696),
-    //   bounds = mapboxgl.Map.latLngBounds(
-    //     northWest,
-    //     southWest,
-    //     southEast,
-    //     northEast
-    //   );
     const layers = {
       1: MapLayer + "streets-v10",
       2: MapLayer + "light-v10",
@@ -91,7 +92,7 @@ const Map = () => {
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: layers[layer],
-      center: EntryPoint,
+      center: [viewport.latitude, viewport.longitude],
       zoom: 16.5,
       antialias: true,
       pitch: 45,
@@ -99,15 +100,34 @@ const Map = () => {
       minZoom: 11,
       maxBounds: Bounds,
     });
+    // map.z
 
-    // map.addControl(
-    //   new Geocoder({
-    //     accessToken: mapboxgl.accessToken,
-    //     mapboxgl: mapboxgl,
-    //   })
-    // );
+    // map.flyTo({
+    //     curve: 1,
+    //     minZoom: 1,
+    //     speed: 0.1,
+    //     screenSpeed: 0.1,
+    //     maxDuration: 10,
+    // });
 
-    // document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+    // map.setCenter([23.343, 53.342]);
+
+    // var geocoder = new Geocoder({ // Initialize the geocoder
+    //   accessToken: mapboxgl.accessToken, // Set the access token
+    //   mapboxgl: mapboxgl, // Set the mapbox-gl instance
+    //   marker: false, // Do not use the default marker style
+    // });
+
+    // Add the geocoder to the map
+    // map.addControl(geocoder);
+
+    map.addControl(
+      new Geocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl,
+        marker: true,
+      })
+    );
 
     // change cursor to pointer when user hovers over a clickable feature
     map.on("mouseenter", (e) => {
@@ -136,20 +156,20 @@ const Map = () => {
         // }
         // map.setLngLat(coordinates);
 
-        const tooltipNode = document.createElement("div");
-        ReactDOM.render(
-          <Tooltip
-            feature={feature}
-            coordinates={coordinates}
-            // address={address}
-          />,
-          tooltipNode
-        );
-        // Set tooltip on map
-        tooltipRef.current
-          .setLngLat(e.lngLat)
-          .setDOMContent(tooltipNode)
-          .addTo(map);
+        // const tooltipNode = document.createElement("div");
+        // ReactDOM.render(
+        //   <Tooltip
+        //     feature={feature}
+        //     coordinates={coordinates}
+        //     // address={address}
+        //   />,
+        //   tooltipNode
+        // );
+        // // Set tooltip on map
+        // tooltipRef.current
+        //   .setLngLat(e.lngLat)
+        //   .setDOMContent(tooltipNode)
+        //   .addTo(map);
       }
     });
 
@@ -169,49 +189,58 @@ const Map = () => {
 
       if (objects !== undefined) {
         objects.forEach((construction) => {
-          console.log(construction.longitude, construction.latitude);
-
           const popup = new mapboxgl.Popup({ offset: 25 });
           popup.setHTML(
-            `<strong class="header-name">${construction.name}</strong>
-              <br><strong> Location: </strong> ${construction.longitude}, ${construction.latitude}
-              <br><strong> Address: </strong> ${construction.address}
-              <br><strong> Article: </strong> <a href=${construction.article} target="_blank">link</a>
-              <br>${construction.description}`
+            `<strong class="header-name">${construction.name}</strong>       
+              ${
+                construction.images[0]
+                  ? `<div>
+                      <img
+                        src=${
+                          GetImageConstruction + `${construction.images[0].name}`
+                        }
+                        alt=""
+                        class="img-style"                     
+                      /> 
+                    </div>`
+                  : ""
+              }
+              ${
+                construction.address
+                  ? `${`<br><strong> Address: </strong> ${construction.address}`}`
+                  : ""
+              }
+              ${
+                construction.article
+                  ? ` <br><strong> Article: </strong> <a href=${construction.article} target="_blank">link</a>`
+                  : ""
+              }
+              ${
+                construction.description
+                  ? `<br>${construction.description}`
+                  : ""
+              }`
           );
 
           var el = document.createElement("div");
-          el.className = "marker " + getConstructionType(construction.type);
+          el.className =
+            "marker " +
+            typeToString(construction.type) +
+            " " +
+            statusToString(construction.status);
 
-          new mapboxgl.Marker(
-            el,
-            {
-              color: "#FFFFFF",
-              draggable: false,
-              // "marker-symbol":"star"
-              // style: Marker
-              // className: "dot",
-            }
-          )
+          new mapboxgl.Marker(el, {
+            color: "#FFFFFF",
+            draggable: false,
+            // "marker-symbol":"star"
+            // style: Marker
+            // className: "dot",
+          })
             .setLngLat([construction.longitude, construction.latitude])
             .setPopup(popup)
             .addTo(map);
         });
       }
-
-      // new mapboxgl.Marker({
-      //   color: "#FFFFFF",
-      //   draggable: true,
-      // })
-      //   .setLngLat([23.829529, 53.677834])
-      //   .addTo(map);
-
-      // new mapboxgl.Marker({
-      //   color: "#FFFFFF",
-      //   draggable: true,
-      // })
-      //   .setLngLat([23.839529, 53.667834])
-      //   .addTo(map);
 
       map.addLayer(
         {
@@ -251,9 +280,53 @@ const Map = () => {
       );
     });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+    
+    console.log("useEffect", viewport.latitude, viewport.longitude);
     // Clean up on unmount
     return () => map.remove();
-  }, [layer, objects]);
+  }, [layer, objects, viewport.longitude, viewport.latitude]);
+
+  console.log("initial state", viewport);
 
   return (
     <div>
@@ -263,11 +336,13 @@ const Map = () => {
         className="geocoder"
         onViewportChange={handleViewportChange}
         mapboxApiAccessToken={Token}
-        // onSelected={onSelected}
+        onSelected={handleSelected}
         viewport={viewport}
         hideOnSelect={true}
         value=""
         // queryParams={params}
+        position="top-right"
+        inputPlaceholder= 'Search for places in Berkeley'
       /> */}
 
       <ButtonGroup type="checkbox" aria-label="Basic example" className="menu">
