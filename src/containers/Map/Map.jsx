@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import mapboxgl from "mapbox-gl";
 import Tooltip from "./Tooltip";
@@ -34,24 +34,24 @@ import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 mapboxgl.accessToken = Token;
 
 const Map = () => {
-  const mapContainerRef = useRef(null);
-  const tooltipRef = useRef(new mapboxgl.Popup({ offset: 15 }));
-  const [layer, setLayer] = useState(3);
+  const mapContainerRef = React.useRef(null);
+  const tooltipRef = React.useRef(new mapboxgl.Popup({ offset: 15 }));
+  const [layer, setLayer] = React.useState(3);
   const dispatch = useDispatch();
   const objects = useSelector((state) => {
     return state.construction.constructions;
   });
 
-  const handleSwitchLayer = useCallback((value) => {
+  const handleSwitchLayer = React.useCallback((value) => {
     setLayer(value);
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     dispatch(getConstructions());
   }, [dispatch]);
 
   // Initialize map when component mounts
-  useEffect(() => {
+  React.useEffect(() => {
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: layers[layer],
