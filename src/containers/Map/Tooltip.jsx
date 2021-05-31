@@ -3,7 +3,6 @@ import React from "react";
 const Tooltip = ({
   feature,
   coordinates,
-  // address
 }) => {
   const { id } = feature.properties;
 
@@ -16,32 +15,8 @@ const Tooltip = ({
       <strong>Type:</strong> {feature.layer.type}
       <br />
       <strong>Coordinates:</strong> {coordinates}
-      {/* <br />
-      <strong>Description:</strong> {feature.properties.description} */}
-      {/* <br />
-      <strong>Adress:</strong> {address} */}
     </div>
   );
 };
 
 export default Tooltip;
-
-
-// `<${ConstructionImages} 
-//                       ${constructionField}=${construction}
-//                     />`
-
-
-// `<img
-//                       src=${`https://localhost:5001/getimageconstruction/objects/79138a2a-d.jpg`}
-//                       alt=""
-//                     /> `
-
-
-// ${
-//   construction.images[0]
-//     ? `<${ConstructionImages} 
-//     ${constructionField}=${construction}
-//   />`
-//     : ""
-// }
