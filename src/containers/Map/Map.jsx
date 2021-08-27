@@ -85,28 +85,28 @@ const Map = () => {
     });
 
     // add tooltip when users mouse move over a point
-    map.on("mousemove", (e) => {
-      const features = map.queryRenderedFeatures(e.point);
-      if (features.length) {
-        const feature = features[0];
-        const coordinates = e.lngLat.toString();
-        // Create tooltip node
-        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-        }
+    // map.on("mousemove", (e) => {
+    //   const features = map.queryRenderedFeatures(e.point);
+    //   if (features.length) {
+    //     const feature = features[0];
+    //     const coordinates = e.lngLat.toString();
+    //     // Create tooltip node
+    //     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+    //       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    //     }
 
-        const tooltipNode = document.createElement("div");
-        ReactDOM.render(
-          <Tooltip feature={feature} coordinates={coordinates} />,
-          tooltipNode
-        );
-        // Set tooltip on map
-        tooltipRef.current
-          .setLngLat(e.lngLat)
-          .setDOMContent(tooltipNode)
-          .addTo(map);
-      }
-    });
+    //     const tooltipNode = document.createElement("div");
+    //     ReactDOM.render(
+    //       <Tooltip feature={feature} coordinates={coordinates} />,
+    //       tooltipNode
+    //     );
+    //     // Set tooltip on map
+    //     tooltipRef.current
+    //       .setLngLat(e.lngLat)
+    //       .setDOMContent(tooltipNode)
+    //       .addTo(map);
+    //   }
+    // });
 
     // The 'building' layer in the mapbox-streets vector source contains building-height
     // data from OpenStreetMap.
@@ -305,8 +305,8 @@ const Map = () => {
         {mapLayers.map((item, index) => (
           <Button
             variant="secondary"
-            className={`Btn-Blue-BG ${layer === index ? "active" : ""}`}
-            onClick={() => handleSwitchLayer(index)}
+            className={`Btn-Blue-BG ${layer === index + 1 ? "active" : ""}`}
+            onClick={() => handleSwitchLayer(index + 1)}
           >
             {item}
           </Button>

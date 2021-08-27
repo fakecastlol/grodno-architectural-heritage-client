@@ -35,7 +35,13 @@ const Header = () => {
   // console.log(currentUser.user.role);
 
   return (
-    <div className={location.pathname === "/map" || "/mapreact" ? "map-style" : "header-style"}>
+    <div
+      className={
+        location.pathname === "/map" || "/mapreact"
+          ? "map-style"
+          : "header-style"
+      }
+    >
       <nav className="navbar navbar-expand-lg navbar-light">
         <Link to={"/"} className="navbar-brand navbar-logo">
           Grodno Architectural Heritage
@@ -51,12 +57,6 @@ const Header = () => {
             <li className="nav-item">
               <Link to={"/map"} className="nav-link">
                 Map
-              </Link>
-            </li>
-
-            <li className="nav-item">
-              <Link to={"/mapreact"} className="nav-link">
-                MapReact
               </Link>
             </li>
 

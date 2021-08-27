@@ -55,7 +55,6 @@ function App() {
               />
               <Route path="/addconstruction" component={AddConstruction} />
               <Route path="/footer" component={Footer} />
-              <Route path="/mapreact" component={MapReact} />
               <Route component={NotFound} />
             </Switch>
           </div>
